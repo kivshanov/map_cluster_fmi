@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface MenuViewController : UIViewController
+
+@property (nonatomic , weak) IBOutlet UIImageView *logoImg;
+@property (nonatomic , weak) IBOutlet UIImageView *swipeImg;
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D23CE7A1861B1880070C068 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D23CE791861B1880070C068 /* background.png */; };
 		0D3DC2E6185F286600FC44F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3DC2E5185F286600FC44F0 /* Foundation.framework */; };
 		0D3DC2E8185F286600FC44F0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3DC2E7185F286600FC44F0 /* CoreGraphics.framework */; };
 		0D3DC2EA185F286600FC44F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3DC2E9185F286600FC44F0 /* UIKit.framework */; };
@@ -14,13 +15,18 @@
 		0D3DC2F2185F286600FC44F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3DC2F1185F286600FC44F0 /* main.m */; };
 		0D3DC2F6185F286600FC44F0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3DC2F5185F286600FC44F0 /* AppDelegate.m */; };
 		0D3DC2F9185F286600FC44F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D3DC2F7185F286600FC44F0 /* Main.storyboard */; };
-		0D3DC2FC185F286600FC44F0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3DC2FB185F286600FC44F0 /* ViewController.m */; };
+		0D3DC2FC185F286600FC44F0 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3DC2FB185F286600FC44F0 /* MenuViewController.m */; };
 		0D3DC2FE185F286600FC44F0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D3DC2FD185F286600FC44F0 /* Images.xcassets */; };
 		0D3DC305185F286600FC44F0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3DC304185F286600FC44F0 /* XCTest.framework */; };
 		0D3DC306185F286600FC44F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3DC2E5185F286600FC44F0 /* Foundation.framework */; };
 		0D3DC307185F286600FC44F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3DC2E9185F286600FC44F0 /* UIKit.framework */; };
 		0D3DC30F185F286600FC44F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0D3DC30D185F286600FC44F0 /* InfoPlist.strings */; };
 		0D3DC311185F286600FC44F0 /* MapClusterFMITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3DC310185F286600FC44F0 /* MapClusterFMITests.m */; };
+		0DB0CE631861B57B00807126 /* bckg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE611861B57B00807126 /* bckg.png */; };
+		0DB0CE661861B6A000807126 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE651861B6A000807126 /* logo.png */; };
+		0DB0CE681861B85F00807126 /* swipe_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE671861B85F00807126 /* swipe_right.png */; };
+		0DB0CE6A1861B89000807126 /* swipe_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE691861B89000807126 /* swipe_left.png */; };
+		0DB0CE6E1861BD1400807126 /* ObjectChoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0CE6D1861BD1400807126 /* ObjectChoiceViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D23CE791861B1880070C068 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		0D3DC2E2185F286600FC44F0 /* MapClusterFMI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapClusterFMI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D3DC2E5185F286600FC44F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0D3DC2E7185F286600FC44F0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -45,14 +52,20 @@
 		0D3DC2F4185F286600FC44F0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0D3DC2F5185F286600FC44F0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0D3DC2F8185F286600FC44F0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		0D3DC2FA185F286600FC44F0 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		0D3DC2FB185F286600FC44F0 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		0D3DC2FA185F286600FC44F0 /* MenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		0D3DC2FB185F286600FC44F0 /* MenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		0D3DC2FD185F286600FC44F0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0D3DC303185F286600FC44F0 /* MapClusterFMITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapClusterFMITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D3DC304185F286600FC44F0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0D3DC30C185F286600FC44F0 /* MapClusterFMITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MapClusterFMITests-Info.plist"; sourceTree = "<group>"; };
 		0D3DC30E185F286600FC44F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D3DC310185F286600FC44F0 /* MapClusterFMITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapClusterFMITests.m; sourceTree = "<group>"; };
+		0DB0CE611861B57B00807126 /* bckg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bckg.png; sourceTree = "<group>"; };
+		0DB0CE651861B6A000807126 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		0DB0CE671861B85F00807126 /* swipe_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipe_right.png; sourceTree = "<group>"; };
+		0DB0CE691861B89000807126 /* swipe_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipe_left.png; sourceTree = "<group>"; };
+		0DB0CE6C1861BD1400807126 /* ObjectChoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectChoiceViewController.h; sourceTree = "<group>"; };
+		0DB0CE6D1861BD1400807126 /* ObjectChoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectChoiceViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +92,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D23CE781861B1770070C068 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0DB0CE691861B89000807126 /* swipe_left.png */,
+				0DB0CE671861B85F00807126 /* swipe_right.png */,
+				0DB0CE651861B6A000807126 /* logo.png */,
+				0DB0CE611861B57B00807126 /* bckg.png */,
+				0D23CE791861B1880070C068 /* background.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		0D3DC2D9185F286600FC44F0 = {
 			isa = PBXGroup;
 			children = (
@@ -112,11 +137,10 @@
 		0D3DC2EB185F286600FC44F0 /* MapClusterFMI */ = {
 			isa = PBXGroup;
 			children = (
+				0DB0CE6B1861BCF700807126 /* Classes */,
 				0D3DC2F4185F286600FC44F0 /* AppDelegate.h */,
 				0D3DC2F5185F286600FC44F0 /* AppDelegate.m */,
 				0D3DC2F7185F286600FC44F0 /* Main.storyboard */,
-				0D3DC2FA185F286600FC44F0 /* ViewController.h */,
-				0D3DC2FB185F286600FC44F0 /* ViewController.m */,
 				0D3DC2FD185F286600FC44F0 /* Images.xcassets */,
 				0D3DC2EC185F286600FC44F0 /* Supporting Files */,
 			);
@@ -126,6 +150,7 @@
 		0D3DC2EC185F286600FC44F0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0D23CE781861B1770070C068 /* Resources */,
 				0D3DC2ED185F286600FC44F0 /* MapClusterFMI-Info.plist */,
 				0D3DC2EE185F286600FC44F0 /* InfoPlist.strings */,
 				0D3DC2F1185F286600FC44F0 /* main.m */,
@@ -150,6 +175,17 @@
 				0D3DC30D185F286600FC44F0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0DB0CE6B1861BCF700807126 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				0D3DC2FA185F286600FC44F0 /* MenuViewController.h */,
+				0D3DC2FB185F286600FC44F0 /* MenuViewController.m */,
+				0DB0CE6C1861BD1400807126 /* ObjectChoiceViewController.h */,
+				0DB0CE6D1861BD1400807126 /* ObjectChoiceViewController.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,7 +265,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D3DC2FE185F286600FC44F0 /* Images.xcassets in Resources */,
+				0DB0CE631861B57B00807126 /* bckg.png in Resources */,
+				0DB0CE661861B6A000807126 /* logo.png in Resources */,
+				0DB0CE6A1861B89000807126 /* swipe_left.png in Resources */,
+				0D23CE7A1861B1880070C068 /* background.png in Resources */,
 				0D3DC2F0185F286600FC44F0 /* InfoPlist.strings in Resources */,
+				0DB0CE681861B85F00807126 /* swipe_right.png in Resources */,
 				0D3DC2F9185F286600FC44F0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,7 +290,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D3DC2FC185F286600FC44F0 /* ViewController.m in Sources */,
+				0DB0CE6E1861BD1400807126 /* ObjectChoiceViewController.m in Sources */,
+				0D3DC2FC185F286600FC44F0 /* MenuViewController.m in Sources */,
 				0D3DC2F6185F286600FC44F0 /* AppDelegate.m in Sources */,
 				0D3DC2F2185F286600FC44F0 /* main.m in Sources */,
 			);
@@ -460,6 +502,7 @@
 				0D3DC316185F286600FC44F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0D3DC317185F286600FC44F0 /* Build configuration list for PBXNativeTarget "MapClusterFMITests" */ = {
 			isa = XCConfigurationList;
@@ -468,6 +511,7 @@
 				0D3DC319185F286600FC44F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
