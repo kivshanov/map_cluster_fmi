@@ -73,6 +73,7 @@
 		A4B6821D1861BE2B00E51708 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		A4B6821F1861BFE100E51708 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A4B682211861BFF300E51708 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		A4B682241861D4EC00E51708 /* GroupProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +198,7 @@
 				0DB0CE6D1861BD1400807126 /* ObjectChoiceViewController.m */,
 				A4B6821C1861BE2B00E51708 /* MapViewController.h */,
 				A4B6821D1861BE2B00E51708 /* MapViewController.m */,
+				A4B682241861D4EC00E51708 /* GroupProtocol.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
