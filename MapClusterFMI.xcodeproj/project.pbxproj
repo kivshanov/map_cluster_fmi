@@ -22,6 +22,9 @@
 		0D3DC307185F286600FC44F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3DC2E9185F286600FC44F0 /* UIKit.framework */; };
 		0D3DC30F185F286600FC44F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0D3DC30D185F286600FC44F0 /* InfoPlist.strings */; };
 		0D3DC311185F286600FC44F0 /* MapClusterFMITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D3DC310185F286600FC44F0 /* MapClusterFMITests.m */; };
+		0D4F2CCC186EFF6F0011B656 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F2CCB186EFF6F0011B656 /* CoreDataManager.m */; };
+		0D4F2CCE186F00040011B656 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D4F2CCD186F00040011B656 /* CoreData.framework */; };
+		0D4F2CD1186F00EC0011B656 /* FindThemModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F2CCF186F00EC0011B656 /* FindThemModel.xcdatamodeld */; };
 		0DB0CE631861B57B00807126 /* bckg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE611861B57B00807126 /* bckg.png */; };
 		0DB0CE661861B6A000807126 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE651861B6A000807126 /* logo.png */; };
 		0DB0CE681861B85F00807126 /* swipe_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE671861B85F00807126 /* swipe_right.png */; };
@@ -63,6 +66,10 @@
 		0D3DC30C185F286600FC44F0 /* MapClusterFMITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MapClusterFMITests-Info.plist"; sourceTree = "<group>"; };
 		0D3DC30E185F286600FC44F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D3DC310185F286600FC44F0 /* MapClusterFMITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapClusterFMITests.m; sourceTree = "<group>"; };
+		0D4F2CCA186EFF6F0011B656 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
+		0D4F2CCB186EFF6F0011B656 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
+		0D4F2CCD186F00040011B656 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0D4F2CD0186F00EC0011B656 /* FindThemModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FindThemModel.xcdatamodel; sourceTree = "<group>"; };
 		0DB0CE611861B57B00807126 /* bckg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bckg.png; sourceTree = "<group>"; };
 		0DB0CE651861B6A000807126 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		0DB0CE671861B85F00807126 /* swipe_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipe_right.png; sourceTree = "<group>"; };
@@ -81,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D4F2CCE186F00040011B656 /* CoreData.framework in Frameworks */,
 				A4B682221861BFF300E51708 /* CoreLocation.framework in Frameworks */,
 				A4B682201861BFE100E51708 /* MapKit.framework in Frameworks */,
 				0D3DC2E8185F286600FC44F0 /* CoreGraphics.framework in Frameworks */,
@@ -136,6 +144,7 @@
 		0D3DC2E4185F286600FC44F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D4F2CCD186F00040011B656 /* CoreData.framework */,
 				A4B682211861BFF300E51708 /* CoreLocation.framework */,
 				A4B6821F1861BFE100E51708 /* MapKit.framework */,
 				0D3DC2E5185F286600FC44F0 /* Foundation.framework */,
@@ -167,6 +176,7 @@
 				0D3DC2EE185F286600FC44F0 /* InfoPlist.strings */,
 				0D3DC2F1185F286600FC44F0 /* main.m */,
 				0D3DC2F3185F286600FC44F0 /* MapClusterFMI-Prefix.pch */,
+				0D4F2CCF186F00EC0011B656 /* FindThemModel.xcdatamodeld */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -192,6 +202,8 @@
 		0DB0CE6B1861BCF700807126 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0D4F2CCA186EFF6F0011B656 /* CoreDataManager.h */,
+				0D4F2CCB186EFF6F0011B656 /* CoreDataManager.m */,
 				0D3DC2FA185F286600FC44F0 /* MenuViewController.h */,
 				0D3DC2FB185F286600FC44F0 /* MenuViewController.m */,
 				0DB0CE6C1861BD1400807126 /* ObjectChoiceViewController.h */,
@@ -305,10 +317,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D4F2CCC186EFF6F0011B656 /* CoreDataManager.m in Sources */,
 				0DB0CE6E1861BD1400807126 /* ObjectChoiceViewController.m in Sources */,
 				0D3DC2FC185F286600FC44F0 /* MenuViewController.m in Sources */,
 				A4B6821E1861BE2B00E51708 /* MapViewController.m in Sources */,
 				0D3DC2F6185F286600FC44F0 /* AppDelegate.m in Sources */,
+				0D4F2CD1186F00EC0011B656 /* FindThemModel.xcdatamodeld in Sources */,
 				0D3DC2F2185F286600FC44F0 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -530,6 +544,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0D4F2CCF186F00EC0011B656 /* FindThemModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0D4F2CD0186F00EC0011B656 /* FindThemModel.xcdatamodel */,
+			);
+			currentVersion = 0D4F2CD0186F00EC0011B656 /* FindThemModel.xcdatamodel */;
+			path = FindThemModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 0D3DC2DA185F286600FC44F0 /* Project object */;
 }
