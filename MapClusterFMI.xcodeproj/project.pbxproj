@@ -30,6 +30,8 @@
 		0DB0CE681861B85F00807126 /* swipe_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE671861B85F00807126 /* swipe_right.png */; };
 		0DB0CE6A1861B89000807126 /* swipe_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DB0CE691861B89000807126 /* swipe_left.png */; };
 		0DB0CE6E1861BD1400807126 /* ObjectChoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0CE6D1861BD1400807126 /* ObjectChoiceViewController.m */; };
+		A44E958518701A7E0055BEB9 /* Distance.m in Sources */ = {isa = PBXBuildFile; fileRef = A44E958418701A7E0055BEB9 /* Distance.m */; };
+		A44E958818701CD30055BEB9 /* PinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = A44E958718701CD30055BEB9 /* PinAnnotation.m */; };
 		A4B6821E1861BE2B00E51708 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B6821D1861BE2B00E51708 /* MapViewController.m */; };
 		A4B682201861BFE100E51708 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B6821F1861BFE100E51708 /* MapKit.framework */; };
 		A4B682221861BFF300E51708 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B682211861BFF300E51708 /* CoreLocation.framework */; };
@@ -76,6 +78,10 @@
 		0DB0CE691861B89000807126 /* swipe_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipe_left.png; sourceTree = "<group>"; };
 		0DB0CE6C1861BD1400807126 /* ObjectChoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectChoiceViewController.h; sourceTree = "<group>"; };
 		0DB0CE6D1861BD1400807126 /* ObjectChoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectChoiceViewController.m; sourceTree = "<group>"; };
+		A44E958318701A7E0055BEB9 /* Distance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Distance.h; sourceTree = "<group>"; };
+		A44E958418701A7E0055BEB9 /* Distance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Distance.m; sourceTree = "<group>"; };
+		A44E958618701CD30055BEB9 /* PinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinAnnotation.h; sourceTree = "<group>"; };
+		A44E958718701CD30055BEB9 /* PinAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinAnnotation.m; sourceTree = "<group>"; };
 		A4B6821C1861BE2B00E51708 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		A4B6821D1861BE2B00E51708 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		A4B6821F1861BFE100E51708 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -210,9 +216,21 @@
 				0DB0CE6D1861BD1400807126 /* ObjectChoiceViewController.m */,
 				A4B6821C1861BE2B00E51708 /* MapViewController.h */,
 				A4B6821D1861BE2B00E51708 /* MapViewController.m */,
-				A4B682241861D4EC00E51708 /* GroupProtocol.h */,
+				A44E9582187019F40055BEB9 /* Algorithm */,
 			);
 			name = Classes;
+			sourceTree = "<group>";
+		};
+		A44E9582187019F40055BEB9 /* Algorithm */ = {
+			isa = PBXGroup;
+			children = (
+				A4B682241861D4EC00E51708 /* GroupProtocol.h */,
+				A44E958318701A7E0055BEB9 /* Distance.h */,
+				A44E958418701A7E0055BEB9 /* Distance.m */,
+				A44E958618701CD30055BEB9 /* PinAnnotation.h */,
+				A44E958718701CD30055BEB9 /* PinAnnotation.m */,
+			);
+			name = Algorithm;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,10 +335,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A44E958518701A7E0055BEB9 /* Distance.m in Sources */,
 				0D4F2CCC186EFF6F0011B656 /* CoreDataManager.m in Sources */,
 				0DB0CE6E1861BD1400807126 /* ObjectChoiceViewController.m in Sources */,
 				0D3DC2FC185F286600FC44F0 /* MenuViewController.m in Sources */,
 				A4B6821E1861BE2B00E51708 /* MapViewController.m in Sources */,
+				A44E958818701CD30055BEB9 /* PinAnnotation.m in Sources */,
 				0D3DC2F6185F286600FC44F0 /* AppDelegate.m in Sources */,
 				0D4F2CD1186F00EC0011B656 /* FindThemModel.xcdatamodeld in Sources */,
 				0D3DC2F2185F286600FC44F0 /* main.m in Sources */,
