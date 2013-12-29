@@ -9,7 +9,8 @@
 #import "MapViewController.h"
 
 @interface MapViewController ()
-
+@property BOOL isMenuOpen;
+@property (weak, nonatomic) IBOutlet UILabel *numberOfAnnotations;
 @end
 
 @implementation MapViewController
@@ -26,13 +27,62 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+	
+    self.isMenuOpen = YES;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)tapAction:(UITapGestureRecognizer *)sender {
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        CGRect rect = self.menu.frame;
+        
+        if (self.isMenuOpen) {
+            rect.origin.y += 100.0f;
+        } else {
+            rect.origin.y -= 100.0f;
+        }
+        self.menu.frame = rect;
+        self.isMenuOpen = !self.isMenuOpen;
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (IBAction)swipeAction:(UISwipeGestureRecognizer *)sender {
+    
+    if(sender.direction == UISwipeGestureRecognizerDirectionDown) {
+        if (self.isMenuOpen) {
+            [UIView animateWithDuration:0.5f animations:^{
+                CGRect rect = self.menu.frame;
+                rect.origin.y += 100.0f;
+                self.menu.frame = rect;
+                self.isMenuOpen = !self.isMenuOpen;
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+        }
+        
+    } else if(sender.direction == UISwipeGestureRecognizerDirectionUp) {
+        if (!self.isMenuOpen) {
+            [UIView animateWithDuration:0.5f animations:^{
+                CGRect rect = self.menu.frame;
+                rect.origin.y -= 100.0f;
+                self.menu.frame = rect;
+                self.isMenuOpen = !self.isMenuOpen;
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+        }
+    }
 }
 
 @end
