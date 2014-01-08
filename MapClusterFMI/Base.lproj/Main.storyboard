@@ -91,9 +91,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="wFu-ig-x2G">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="wFu-ig-x2G" customClass="MapView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="lRN-93-0VB" id="JKj-zK-XMC"/>
+                                </connections>
                             </mapView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NKG-kd-NVt">
                                 <rect key="frame" x="0.0" y="418" width="320" height="150"/>
@@ -102,6 +105,16 @@
                                     <view alpha="0.59999999999999998" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z6x-6K-A4V" userLabel="View - gestures">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qhz-Oz-ZsI">
+                                                <rect key="frame" x="32" y="82" width="74" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Add 100"/>
+                                                <connections>
+                                                    <action selector="addButtonTouchUpInside:" destination="lRN-93-0VB" eventType="touchUpInside" id="ERj-O8-Fe9"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
                                         <connections>
@@ -131,7 +144,7 @@
                         <gestureRecognizers/>
                     </view>
                     <connections>
-                        <outlet property="mapView" destination="wFu-ig-x2G" id="dcU-Zh-YJS"/>
+                        <outlet property="mapView" destination="wFu-ig-x2G" id="m60-gR-cku"/>
                         <outlet property="menu" destination="NKG-kd-NVt" id="27r-1H-LxE"/>
                         <outlet property="numberOfAnnotations" destination="W1w-48-to7" id="obq-aC-cPJ"/>
                     </connections>

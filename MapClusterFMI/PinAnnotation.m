@@ -41,27 +41,6 @@
     return self;
 }
 
-// find min/max and calculate center
-- (CLLocationCoordinate2D)coordinate;
-{
-    if (self.annotationsInCluster.count == 0) return CLLocationCoordinate2DMake(0, 0);
-    
-    CLLocationCoordinate2D min = [self.annotationsInCluster[0] coordinate];
-    CLLocationCoordinate2D max = [self.annotationsInCluster[0] coordinate];
-    for (id<MKAnnotation> annotation in self.annotationsInCluster) {
-        min.latitude = MIN(min.latitude, annotation.coordinate.latitude);
-        min.longitude = MIN(min.longitude, annotation.coordinate.longitude);
-        max.latitude = MAX(max.latitude, annotation.coordinate.latitude);
-        max.longitude = MAX(max.longitude, annotation.coordinate.longitude);
-    }
-    
-    CLLocationCoordinate2D center = min;
-    center.latitude += (max.latitude-min.latitude)/2.0;
-    center.longitude += (max.longitude-min.longitude)/2.0;
-    
-    return center;
-}
-
 - (NSArray*)annotationsInCluster;
 {
     return [_annotationsInCluster copy];
@@ -91,6 +70,46 @@
     for (id<MKAnnotation> annotation in annotations) {
         [self removeAnnotation: annotation];
     }
+}
+
+#pragma mark center coordinate
+
+- (CLLocationCoordinate2D)coordinate;
+{
+    if (self.annotationsInCluster.count == 0) return CLLocationCoordinate2DMake(0, 0);
+    
+    // find max/min coords
+    CLLocationCoordinate2D min = [self.annotationsInCluster[0] coordinate];
+    CLLocationCoordinate2D max = [self.annotationsInCluster[0] coordinate];
+    for (id<MKAnnotation> annotation in self.annotationsInCluster) {
+        min.latitude = MIN(min.latitude, annotation.coordinate.latitude);
+        min.longitude = MIN(min.longitude, annotation.coordinate.longitude);
+        max.latitude = MAX(max.latitude, annotation.coordinate.latitude);
+        max.longitude = MAX(max.longitude, annotation.coordinate.longitude);
+    }
+    
+    // calc center
+    CLLocationCoordinate2D center = min;
+    center.latitude += (max.latitude-min.latitude)/2.0;
+    center.longitude += (max.longitude-min.longitude)/2.0;
+    
+    return center;
+}
+
+#pragma mark equality
+
+- (BOOL)isEqual:(PinAnnotation*)annotation;
+{
+    if (![annotation isKindOfClass:[PinAnnotation class]]) {
+        return NO;
+    }
+    
+    return (self.coordinate.latitude == annotation.coordinate.latitude &&
+            self.coordinate.longitude == annotation.coordinate.longitude &&
+            [self.title isEqualToString:annotation.title] &&
+            [self.subtitle isEqualToString:annotation.subtitle] &&
+            [self.groupTag isEqualToString:annotation.groupTag] &&
+            [self.annotationsInCluster isEqual:annotation.annotationsInCluster]);
 }
 
 @end
