@@ -7,7 +7,6 @@
 //
 
 #import "MenuViewController.h"
-#import "ObjectChoiceViewController.h"
 #import "MapViewController.h"
 
 @interface MenuViewController ()
@@ -17,15 +16,19 @@
 @implementation MenuViewController
 
 - (IBAction)menuTapped:(UIButton *)sender {
+    MapViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"map"];
     switch (sender.tag) {
         case 0:
             NSLog(@"parks");
+            vc.objectType = @"tree";
             break;
         case 1:
             NSLog(@"restaurants");
+            vc.objectType = @"restaurant";
             break;
         case 2:
             NSLog(@"cafes");
+            vc.objectType = @"coffee";
             break;
             
         default:
@@ -40,7 +43,7 @@
                      }
                      completion:^(BOOL finished) {
                          
-                         MapViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"map"];
+                         
                          [self presentViewController:vc animated:NO completion:^{
                              //
                          }];
@@ -97,7 +100,6 @@
 
 
 - (IBAction)swipeAction:(UISwipeGestureRecognizer *)sender {
-    NSLog(@"swipe");
     if(sender.direction == UISwipeGestureRecognizerDirectionLeft) {
         if(!self.logoImg.hidden) {
             [UIView animateWithDuration:0.5

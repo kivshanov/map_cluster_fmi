@@ -10,9 +10,10 @@
 #import <MapKit/MapKit.h>
 #import "MapView.h"
 
-@interface MapViewController : UIViewController <MKMapViewDelegate>
+@interface MapViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet MapView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *menu;
+@property (strong, nonatomic) NSString *objectType;
 
 @end

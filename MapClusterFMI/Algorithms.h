@@ -12,7 +12,7 @@
 typedef enum {
     ClusteringBubbleMethod,
     ClusteringGridMethod
-} OCClusteringMethod;
+} ClusteringMethod;
 
 @interface Algorithms : NSObject
 

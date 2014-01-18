@@ -64,4 +64,61 @@
     return returnArray;
 }
 
++ (NSArray*)gridClusteringWithAnnotations:(NSArray*)annotationsToCluster
+                              clusterRect:(MKCoordinateSpan)tileRect
+                                  grouped:(BOOL)grouped;
+{
+    NSMutableDictionary *clusteredAnnotations = [[NSMutableDictionary alloc] init];
+    
+    // iterate through all annotations
+	for (id<MKAnnotation> annotation in annotationsToCluster)
+    {
+        // calculate grid coordinates of the annotation
+        NSInteger row = ([annotation coordinate].longitude+180.0)/tileRect.longitudeDelta;
+        NSInteger column = ([annotation coordinate].latitude+90.0)/tileRect.latitudeDelta;
+        NSString *key = [NSString stringWithFormat:@"%ld%ld",(long)row,(long)column];
+        
+        // add group tag to key
+        if (grouped && [annotation conformsToProtocol:@protocol(GroupProtocol)]) {
+            key = [NSString stringWithFormat: @"%@%@", key, [(id<GroupProtocol>)annotation groupTag]];
+        }
+        
+        // get the cluster for the calculated coordinates
+        PinAnnotation *clusterAnnotation = [clusteredAnnotations objectForKey:key];
+        
+        // if there is none, create one
+        if (clusterAnnotation == nil) {
+            clusterAnnotation = [[PinAnnotation alloc] init];
+            
+            CLLocationDegrees lon = row * tileRect.longitudeDelta + tileRect.longitudeDelta/2.0 - 180.0;
+            CLLocationDegrees lat = (column * tileRect.latitudeDelta) + tileRect.latitudeDelta/2.0 - 90.0;
+            clusterAnnotation.coordinate = CLLocationCoordinate2DMake(lat, lon);
+            
+            // check group
+            if (grouped && [annotation conformsToProtocol:@protocol(GroupProtocol)]) {
+                clusterAnnotation.groupTag = [(id<GroupProtocol>)annotation groupTag];
+            }
+            
+            [clusteredAnnotations setValue:clusterAnnotation forKey:key];
+        }
+        
+        // add annotation to the cluster
+        [clusterAnnotation addAnnotation:annotation];
+	}
+    
+    // return array
+    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
+    
+    // add single annotations directly without OCAnnotation
+    for (PinAnnotation *anAnnotation in [clusteredAnnotations allValues]) {
+        if ([anAnnotation.annotationsInCluster count] == 1) {
+            [returnArray addObject:[anAnnotation.annotationsInCluster lastObject]];
+        } else if ([anAnnotation.annotationsInCluster count] > 1) {
+            [returnArray addObject:anAnnotation];
+        }
+    }
+    
+    return returnArray;
+}
+
 @end

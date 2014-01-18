@@ -8,14 +8,20 @@
 
 #import "MapViewController.h"
 #import "SingleAnnotation.h"
+#import "Algorithms.h"
+#import "PinAnnotation.h"
 
 @interface MapViewController ()
 @property BOOL isMenuOpen;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAnnotations;
 @end
 
-static NSString *const kTYPE1 = @"test1";
-static NSString *const kTYPE2 = @"test2";
+static NSString *const kTYPE1 = @"Park";
+static NSString *const kTYPE2 = @"Restaurant";
+static NSString *const kTYPE3 = @"Cafe";
+static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
+
+
 static int kMax = 2147483647;
 
 @implementation MapViewController
@@ -40,6 +46,7 @@ static int kMax = 2147483647;
     [super viewDidLoad];
     self.mapView.delegate = self;
     self.isMenuOpen = YES;
+    self.mapView.clusterSize = kDEFAULTCLUSTERSIZE;
     self.numberOfAnnotations.text = @"0";
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
@@ -120,6 +127,91 @@ static int kMax = 2147483647;
 
 
 
+- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation{
+    MKAnnotationView *annotationView;
+    
+    // if it's a cluster
+    if ([annotation isKindOfClass:[PinAnnotation class]]) {
+        
+        PinAnnotation *clusterAnnotation = (PinAnnotation *)annotation;
+        
+        annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:@"ClusterView"];
+        if (!annotationView) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"ClusterView"];
+            annotationView.canShowCallout = YES;
+            annotationView.centerOffset = CGPointMake(0, -20);
+        }
+        //calculate cluster region
+//        CLLocationDistance clusterRadius = self.mapView.region.span.longitudeDelta * self.mapView.clusterSize * 111000 / 2.0f; //static circle size of cluster
+        CLLocationDistance clusterRadius = self.mapView.region.span.longitudeDelta/log(self.mapView.region.span.longitudeDelta*self.mapView.region.span.longitudeDelta) * log(pow([clusterAnnotation.annotationsInCluster count], 4)) * self.mapView.clusterSize * 50000; //circle size based on number of annotations in cluster
+        
+        MKCircle *circle = [MKCircle circleWithCenterCoordinate:clusterAnnotation.coordinate radius:clusterRadius * cos([annotation coordinate].latitude * M_PI / 180.0)];
+        [circle setTitle:@"background"];
+        [self.mapView addOverlay:circle];
+        
+        MKCircle *circleLine = [MKCircle circleWithCenterCoordinate:clusterAnnotation.coordinate radius:clusterRadius * cos([annotation coordinate].latitude * M_PI / 180.0)];
+        [circleLine setTitle:@"line"];
+        [self.mapView addOverlay:circleLine];
+        
+        // set title
+        clusterAnnotation.title = @"Cluster";
+        clusterAnnotation.subtitle = [NSString stringWithFormat:@"Containing annotations: %d", [clusterAnnotation.annotationsInCluster count]];
+        
+        // set its image
+        annotationView.image = [UIImage imageNamed:@"regular.png"];
+        
+        // change pin image for group
+        if (self.mapView.clusterByGroupTag) {
+            annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@s.png", clusterAnnotation.groupTag]];
+            clusterAnnotation.title = clusterAnnotation.groupTag;
+        }
+    }
+    // If it's a single annotation
+    else if([annotation isKindOfClass:[SingleAnnotation class]]){
+        SingleAnnotation *singleAnnotation = (SingleAnnotation *)annotation;
+        annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:@"singleAnnotationView"];
+        if (!annotationView) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:singleAnnotation reuseIdentifier:@"singleAnnotationView"];
+            annotationView.canShowCallout = YES;
+            annotationView.centerOffset = CGPointMake(0, -20);
+        }
+        singleAnnotation.title = singleAnnotation.groupTag;
+        annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", singleAnnotation.groupTag]];
+    }
+    // Error
+    else{
+        annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:@"errorAnnotationView"];
+        if (!annotationView) {
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"errorAnnotationView"];
+            annotationView.canShowCallout = NO;
+            ((MKPinAnnotationView *)annotationView).pinColor = MKPinAnnotationColorRed;
+        }
+    }
+    
+    return annotationView;
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay{
+    MKCircle *circle = overlay;
+    MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
+    
+    if ([circle.title isEqualToString:@"background"])
+    {
+        circleView.fillColor = [UIColor redColor];
+        circleView.alpha = 0.25;
+    } else
+    {
+        circleView.strokeColor = [UIColor blackColor];
+        circleView.lineWidth = 0.8;
+    }
+    
+    return circleView;
+}
+
+- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated{
+    [self.mapView removeOverlays:self.mapView.overlays];
+    [self.mapView doClustering];
+}
 
 
 
@@ -136,19 +228,95 @@ static int kMax = 2147483647;
         [annotationsToAdd addObject:annotation];
         
         // add to group if specified
-        if (annotationsToAdd.count < (randomLocations.count)/2) {
-            annotation.groupTag = kTYPE1;
-        }
-        else{
-            annotation.groupTag = kTYPE2;
-        }
+        annotation.groupTag = self.objectType;
         
     }
     
     [self.mapView addAnnotations:[annotationsToAdd allObjects]];
-    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%lu", [self.mapView.annotations count]];
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", [self.mapView.annotations count]];
 }
 
+- (IBAction)changeClusterMethodButtonTouchUpInside:(UIButton *)sender {
+    [self.mapView removeOverlays:self.mapView.overlays];
+    if (self.mapView.clusteringMethod == ClusteringBubbleMethod) {
+        [sender setTitle:@"Bubble cluster" forState:UIControlStateNormal];
+        self.mapView.clusteringMethod = ClusteringGridMethod;
+    }
+    else{
+        [sender setTitle:@"Grid cluster" forState:UIControlStateNormal];
+        self.mapView.clusteringMethod = ClusteringBubbleMethod;
+    }
+    [self.mapView doClustering];
+}
+
+- (IBAction)clusteringButtonTouchUpInside:(UIButton *)sender {
+    [self.mapView removeOverlays:self.mapView.overlays];
+    if (self.mapView.clusteringEnabled) {
+        [sender setTitle:@"Turn clustering on" forState:UIControlStateNormal];
+        self.mapView.clusteringEnabled = NO;
+    }
+    else{
+        [sender setTitle:@"Turn clustering off" forState:UIControlStateNormal];
+        self.mapView.clusteringEnabled = YES;
+    }
+    [self.mapView doClustering];
+}
+
+- (IBAction)removeButtonTouchUpInside:(id)sender {
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView removeOverlays:self.mapView.overlays];
+    self.numberOfAnnotations.text = @"0";
+}
+
+- (IBAction)buttonGroupByTagTouchUpInside:(UIButton *)sender {
+    self.mapView.clusterByGroupTag = ! self.mapView.clusterByGroupTag;
+    if(self.mapView.clusterByGroupTag){
+        [sender setTitle:@"Turn groups off" forState:UIControlStateNormal];
+        self.mapView.clusterSize = kDEFAULTCLUSTERSIZE * 2.0;
+    }
+    else{
+        [sender setTitle:@"Turn groups on" forState:UIControlStateNormal];
+        self.mapView.clusterSize = kDEFAULTCLUSTERSIZE;
+    }
+    
+    [self.mapView removeOverlays:self.mapView.overlays];
+    [self.mapView doClustering];
+}
+
+- (IBAction)changeGroup:(id)sender {
+    UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:@"Select another group:" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
+                            @"City Parks",
+                            @"Restaurants",
+                            @"Cafes",
+                            nil];
+    popup.tag = 1;
+    [popup showInView:[UIApplication sharedApplication].keyWindow];
+
+}
+
+- (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (popup.tag) {
+        case 1: {
+            switch (buttonIndex) {
+                case 0:
+                    self.objectType = @"tree";
+                    break;
+                case 1:
+                    self.objectType = @"restaurant";
+                    break;
+                case 2:
+                    self.objectType = @"coffee";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
 
 - (NSArray *)randomCoordinatesGenerator:(int) numberOfCoordinates
 {
