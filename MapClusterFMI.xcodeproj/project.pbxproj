@@ -33,18 +33,18 @@
 		A44E958818701CD30055BEB9 /* PinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = A44E958718701CD30055BEB9 /* PinAnnotation.m */; };
 		A4B682201861BFE100E51708 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B6821F1861BFE100E51708 /* MapKit.framework */; };
 		A4B682221861BFF300E51708 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B682211861BFF300E51708 /* CoreLocation.framework */; };
-		A4F414EA188AB42400AFF489 /* coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414DE188AB42400AFF489 /* coffee.png */; };
-		A4F414EB188AB42400AFF489 /* coffee@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414DF188AB42400AFF489 /* coffee@2x.png */; };
-		A4F414EC188AB42400AFF489 /* coffees.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E0188AB42400AFF489 /* coffees.png */; };
-		A4F414ED188AB42400AFF489 /* coffees@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E1188AB42400AFF489 /* coffees@2x.png */; };
-		A4F414EE188AB42400AFF489 /* restaurant.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E2188AB42400AFF489 /* restaurant.png */; };
-		A4F414EF188AB42400AFF489 /* restaurant@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E3188AB42400AFF489 /* restaurant@2x.png */; };
-		A4F414F0188AB42400AFF489 /* restaurants.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E4188AB42400AFF489 /* restaurants.png */; };
-		A4F414F1188AB42400AFF489 /* restaurants@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E5188AB42400AFF489 /* restaurants@2x.png */; };
-		A4F414F2188AB42400AFF489 /* tees@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E6188AB42400AFF489 /* tees@2x.png */; };
-		A4F414F3188AB42400AFF489 /* tree.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E7188AB42400AFF489 /* tree.png */; };
-		A4F414F4188AB42400AFF489 /* tree@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E8188AB42400AFF489 /* tree@2x.png */; };
-		A4F414F5188AB42400AFF489 /* trees.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E9188AB42400AFF489 /* trees.png */; };
+		A4F414EA188AB42400AFF489 /* Cafe.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414DE188AB42400AFF489 /* Cafe.png */; };
+		A4F414EB188AB42400AFF489 /* Cafe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414DF188AB42400AFF489 /* Cafe@2x.png */; };
+		A4F414EC188AB42400AFF489 /* Cafes.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E0188AB42400AFF489 /* Cafes.png */; };
+		A4F414ED188AB42400AFF489 /* Cafes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E1188AB42400AFF489 /* Cafes@2x.png */; };
+		A4F414EE188AB42400AFF489 /* Restaurant.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E2188AB42400AFF489 /* Restaurant.png */; };
+		A4F414EF188AB42400AFF489 /* Restaurant@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E3188AB42400AFF489 /* Restaurant@2x.png */; };
+		A4F414F0188AB42400AFF489 /* Restaurants.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E4188AB42400AFF489 /* Restaurants.png */; };
+		A4F414F1188AB42400AFF489 /* Restaurants@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E5188AB42400AFF489 /* Restaurants@2x.png */; };
+		A4F414F2188AB42400AFF489 /* Parks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E6188AB42400AFF489 /* Parks@2x.png */; };
+		A4F414F3188AB42400AFF489 /* Park.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E7188AB42400AFF489 /* Park.png */; };
+		A4F414F4188AB42400AFF489 /* Park@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E8188AB42400AFF489 /* Park@2x.png */; };
+		A4F414F5188AB42400AFF489 /* Parks.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414E9188AB42400AFF489 /* Parks.png */; };
 		A4F414F8188AC61900AFF489 /* regular.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414F6188AC61900AFF489 /* regular.png */; };
 		A4F414F9188AC61900AFF489 /* regular@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414F7188AC61900AFF489 /* regular@2x.png */; };
 		A4F414FF188AF4FF00AFF489 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F414FE188AF4FF00AFF489 /* MapViewController.m */; };
@@ -100,18 +100,18 @@
 		A4B6821F1861BFE100E51708 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A4B682211861BFF300E51708 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		A4B682241861D4EC00E51708 /* GroupProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupProtocol.h; sourceTree = "<group>"; };
-		A4F414DE188AB42400AFF489 /* coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = coffee.png; sourceTree = "<group>"; };
-		A4F414DF188AB42400AFF489 /* coffee@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "coffee@2x.png"; sourceTree = "<group>"; };
-		A4F414E0188AB42400AFF489 /* coffees.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = coffees.png; sourceTree = "<group>"; };
-		A4F414E1188AB42400AFF489 /* coffees@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "coffees@2x.png"; sourceTree = "<group>"; };
-		A4F414E2188AB42400AFF489 /* restaurant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restaurant.png; sourceTree = "<group>"; };
-		A4F414E3188AB42400AFF489 /* restaurant@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurant@2x.png"; sourceTree = "<group>"; };
-		A4F414E4188AB42400AFF489 /* restaurants.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restaurants.png; sourceTree = "<group>"; };
-		A4F414E5188AB42400AFF489 /* restaurants@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurants@2x.png"; sourceTree = "<group>"; };
-		A4F414E6188AB42400AFF489 /* tees@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tees@2x.png"; sourceTree = "<group>"; };
-		A4F414E7188AB42400AFF489 /* tree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree.png; sourceTree = "<group>"; };
-		A4F414E8188AB42400AFF489 /* tree@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tree@2x.png"; sourceTree = "<group>"; };
-		A4F414E9188AB42400AFF489 /* trees.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trees.png; sourceTree = "<group>"; };
+		A4F414DE188AB42400AFF489 /* Cafe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cafe.png; sourceTree = "<group>"; };
+		A4F414DF188AB42400AFF489 /* Cafe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cafe@2x.png"; sourceTree = "<group>"; };
+		A4F414E0188AB42400AFF489 /* Cafes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cafes.png; sourceTree = "<group>"; };
+		A4F414E1188AB42400AFF489 /* Cafes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cafes@2x.png"; sourceTree = "<group>"; };
+		A4F414E2188AB42400AFF489 /* Restaurant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Restaurant.png; sourceTree = "<group>"; };
+		A4F414E3188AB42400AFF489 /* Restaurant@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Restaurant@2x.png"; sourceTree = "<group>"; };
+		A4F414E4188AB42400AFF489 /* Restaurants.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Restaurants.png; sourceTree = "<group>"; };
+		A4F414E5188AB42400AFF489 /* Restaurants@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Restaurants@2x.png"; sourceTree = "<group>"; };
+		A4F414E6188AB42400AFF489 /* Parks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Parks@2x.png"; sourceTree = "<group>"; };
+		A4F414E7188AB42400AFF489 /* Park.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Park.png; sourceTree = "<group>"; };
+		A4F414E8188AB42400AFF489 /* Park@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Park@2x.png"; sourceTree = "<group>"; };
+		A4F414E9188AB42400AFF489 /* Parks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Parks.png; sourceTree = "<group>"; };
 		A4F414F6188AC61900AFF489 /* regular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = regular.png; sourceTree = "<group>"; };
 		A4F414F7188AC61900AFF489 /* regular@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "regular@2x.png"; sourceTree = "<group>"; };
 		A4F414FE188AF4FF00AFF489 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
@@ -275,18 +275,18 @@
 		A4F414DD188AB42400AFF489 /* Images - pins */ = {
 			isa = PBXGroup;
 			children = (
-				A4F414DE188AB42400AFF489 /* coffee.png */,
-				A4F414DF188AB42400AFF489 /* coffee@2x.png */,
-				A4F414E0188AB42400AFF489 /* coffees.png */,
-				A4F414E1188AB42400AFF489 /* coffees@2x.png */,
-				A4F414E2188AB42400AFF489 /* restaurant.png */,
-				A4F414E3188AB42400AFF489 /* restaurant@2x.png */,
-				A4F414E4188AB42400AFF489 /* restaurants.png */,
-				A4F414E5188AB42400AFF489 /* restaurants@2x.png */,
-				A4F414E6188AB42400AFF489 /* tees@2x.png */,
-				A4F414E7188AB42400AFF489 /* tree.png */,
-				A4F414E8188AB42400AFF489 /* tree@2x.png */,
-				A4F414E9188AB42400AFF489 /* trees.png */,
+				A4F414DE188AB42400AFF489 /* Cafe.png */,
+				A4F414DF188AB42400AFF489 /* Cafe@2x.png */,
+				A4F414E0188AB42400AFF489 /* Cafes.png */,
+				A4F414E1188AB42400AFF489 /* Cafes@2x.png */,
+				A4F414E2188AB42400AFF489 /* Restaurant.png */,
+				A4F414E3188AB42400AFF489 /* Restaurant@2x.png */,
+				A4F414E4188AB42400AFF489 /* Restaurants.png */,
+				A4F414E5188AB42400AFF489 /* Restaurants@2x.png */,
+				A4F414E6188AB42400AFF489 /* Parks@2x.png */,
+				A4F414E7188AB42400AFF489 /* Park.png */,
+				A4F414E8188AB42400AFF489 /* Park@2x.png */,
+				A4F414E9188AB42400AFF489 /* Parks.png */,
 				A4F414F6188AC61900AFF489 /* regular.png */,
 				A4F414F7188AC61900AFF489 /* regular@2x.png */,
 			);
@@ -370,26 +370,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4F414EC188AB42400AFF489 /* coffees.png in Resources */,
-				A4F414EE188AB42400AFF489 /* restaurant.png in Resources */,
-				A4F414F0188AB42400AFF489 /* restaurants.png in Resources */,
+				A4F414EC188AB42400AFF489 /* Cafes.png in Resources */,
+				A4F414EE188AB42400AFF489 /* Restaurant.png in Resources */,
+				A4F414F0188AB42400AFF489 /* Restaurants.png in Resources */,
 				0D3DC2FE185F286600FC44F0 /* Images.xcassets in Resources */,
-				A4F414EF188AB42400AFF489 /* restaurant@2x.png in Resources */,
+				A4F414EF188AB42400AFF489 /* Restaurant@2x.png in Resources */,
 				A4F414F9188AC61900AFF489 /* regular@2x.png in Resources */,
 				0DB0CE631861B57B00807126 /* bckg.png in Resources */,
 				A4F414F8188AC61900AFF489 /* regular.png in Resources */,
-				A4F414F2188AB42400AFF489 /* tees@2x.png in Resources */,
+				A4F414F2188AB42400AFF489 /* Parks@2x.png in Resources */,
 				0DB0CE661861B6A000807126 /* logo.png in Resources */,
 				0DB0CE6A1861B89000807126 /* swipe_left.png in Resources */,
-				A4F414EB188AB42400AFF489 /* coffee@2x.png in Resources */,
-				A4F414ED188AB42400AFF489 /* coffees@2x.png in Resources */,
-				A4F414F5188AB42400AFF489 /* trees.png in Resources */,
-				A4F414F3188AB42400AFF489 /* tree.png in Resources */,
-				A4F414EA188AB42400AFF489 /* coffee.png in Resources */,
+				A4F414EB188AB42400AFF489 /* Cafe@2x.png in Resources */,
+				A4F414ED188AB42400AFF489 /* Cafes@2x.png in Resources */,
+				A4F414F5188AB42400AFF489 /* Parks.png in Resources */,
+				A4F414F3188AB42400AFF489 /* Park.png in Resources */,
+				A4F414EA188AB42400AFF489 /* Cafe.png in Resources */,
 				0D23CE7A1861B1880070C068 /* background.png in Resources */,
 				0D3DC2F0185F286600FC44F0 /* InfoPlist.strings in Resources */,
-				A4F414F1188AB42400AFF489 /* restaurants@2x.png in Resources */,
-				A4F414F4188AB42400AFF489 /* tree@2x.png in Resources */,
+				A4F414F1188AB42400AFF489 /* Restaurants@2x.png in Resources */,
+				A4F414F4188AB42400AFF489 /* Park@2x.png in Resources */,
 				0DB0CE681861B85F00807126 /* swipe_right.png in Resources */,
 				0D3DC2F9185F286600FC44F0 /* Main.storyboard in Resources */,
 			);

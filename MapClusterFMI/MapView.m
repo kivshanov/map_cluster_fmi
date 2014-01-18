@@ -77,25 +77,29 @@
 
 #pragma mark - MKMapView
 
-- (void)addAnnotation:(id < MKAnnotation >)annotation{
+- (void)addAnnotation:(id < MKAnnotation >)annotation
+{
     [_allAnnotations addObject:annotation];
     self.neeedsClustering = YES;
     [self doClustering];
 }
 
-- (void)addAnnotations:(NSArray *)annotations{
+- (void)addAnnotations:(NSArray *)annotations
+{
     [_allAnnotations addObjectsFromArray:annotations];
     self.neeedsClustering = YES;
     [self doClustering];
 }
 
-- (void)removeAnnotation:(id < MKAnnotation >)annotation{
+- (void)removeAnnotation:(id < MKAnnotation >)annotation
+{
     [_allAnnotations removeObject:annotation];
     self.neeedsClustering = YES;
     [self doClustering];
 }
 
-- (void)removeAnnotations:(NSArray *)annotations{
+- (void)removeAnnotations:(NSArray *)annotations
+{
     for (id<MKAnnotation> annotation in annotations) {
         [_allAnnotations removeObject:annotation];
     }
@@ -103,11 +107,13 @@
     [self doClustering];
 }
 
-- (NSArray *)annotations {
+- (NSArray *)annotations
+{
     return [_allAnnotations allObjects];
 }
 
-- (NSArray *)displayedAnnotations {
+- (NSArray *)displayedAnnotations
+{
     return super.annotations;
 }
 
@@ -124,7 +130,7 @@
 
 #pragma mark - Clustering
 
-- (void)doClustering;
+- (void)doClustering
 {
     // only recluster if, annotations did change, map was zoomed or,
     // map was panned significantly
@@ -208,12 +214,12 @@
 
 #pragma mark map rect changes tracking
 
-- (BOOL)mapWasZoomed;
+- (BOOL)mapWasZoomed
 {
     return (fabs(self.lastRefreshedMapRect.size.width - self.visibleMapRect.size.width) > 0.1f);
 }
 
-- (BOOL)mapWasPannedSignificantly;
+- (BOOL)mapWasPannedSignificantly
 {
     CGPoint lastPoint = [self convertCoordinate:self.lastRefreshedMapRegion.center toPointToView:self];
     CGPoint currentPoint = [self convertCoordinate:self.region.center toPointToView:self];
@@ -224,7 +230,8 @@
 
 #pragma mark - Helpers
 
-- (NSArray *)filterAnnotationsForVisibleMap:(NSArray *)annotationsToFilter{
+- (NSArray *)filterAnnotationsForVisibleMap:(NSArray *)annotationsToFilter
+{
     // return array
     NSMutableArray *filteredAnnotations = [[NSMutableArray alloc] initWithCapacity:[annotationsToFilter count]];
     

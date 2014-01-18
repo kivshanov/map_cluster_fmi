@@ -14,14 +14,11 @@
 @interface MapViewController ()
 @property BOOL isMenuOpen;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAnnotations;
+@property (strong, nonatomic) NSString *placeType;
+@property (strong, nonatomic) NSArray *allTypes;
 @end
 
-static NSString *const kTYPE1 = @"Park";
-static NSString *const kTYPE2 = @"Restaurant";
-static NSString *const kTYPE3 = @"Cafe";
 static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
-
-
 static int kMax = 2147483647;
 
 @implementation MapViewController
@@ -48,6 +45,8 @@ static int kMax = 2147483647;
     self.isMenuOpen = YES;
     self.mapView.clusterSize = kDEFAULTCLUSTERSIZE;
     self.numberOfAnnotations.text = @"0";
+    self.allTypes = [NSArray arrayWithObjects:@"Park", @"Restaurant", @"Cafe", nil];
+    self.placeType = [self.allTypes objectAtIndex:self.selectedType];
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         for (UIButton *button in self.view.subviews) {
@@ -77,7 +76,8 @@ static int kMax = 2147483647;
     }
 }
 
-- (IBAction)tapAction:(UITapGestureRecognizer *)sender {
+- (IBAction)tapAction:(UITapGestureRecognizer *)sender
+{
     
     [UIView animateWithDuration:0.5f animations:^{
         CGRect rect = self.menu.frame;
@@ -95,7 +95,8 @@ static int kMax = 2147483647;
     }];
 }
 
-- (IBAction)swipeAction:(UISwipeGestureRecognizer *)sender {
+- (IBAction)swipeAction:(UISwipeGestureRecognizer *)sender
+{
     
     if(sender.direction == UISwipeGestureRecognizerDirectionDown) {
         if (self.isMenuOpen) {
@@ -127,7 +128,8 @@ static int kMax = 2147483647;
 
 
 
-- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation{
+- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation
+{
     MKAnnotationView *annotationView;
     
     // if it's a cluster
@@ -163,7 +165,7 @@ static int kMax = 2147483647;
         // change pin image for group
         if (self.mapView.clusterByGroupTag) {
             annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@s.png", clusterAnnotation.groupTag]];
-            clusterAnnotation.title = clusterAnnotation.groupTag;
+            clusterAnnotation.title = [NSString stringWithFormat:@"%@s", clusterAnnotation.groupTag];
         }
     }
     // If it's a single annotation
@@ -191,7 +193,8 @@ static int kMax = 2147483647;
     return annotationView;
 }
 
-- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay{
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
+{
     MKCircle *circle = overlay;
     MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
     
@@ -208,7 +211,8 @@ static int kMax = 2147483647;
     return circleView;
 }
 
-- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated{
+- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated
+{
     [self.mapView removeOverlays:self.mapView.overlays];
     [self.mapView doClustering];
 }
@@ -218,7 +222,8 @@ static int kMax = 2147483647;
 // ==============================
 #pragma mark - UI actions
 
-- (IBAction)addButtonTouchUpInside:(id)sender {
+- (IBAction)addButtonTouchUpInside:(id)sender
+{
     [self.mapView removeOverlays:self.mapView.overlays];
     NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomCoordinatesGenerator:100]];
     NSMutableSet *annotationsToAdd = [[NSMutableSet alloc] init];
@@ -228,7 +233,7 @@ static int kMax = 2147483647;
         [annotationsToAdd addObject:annotation];
         
         // add to group if specified
-        annotation.groupTag = self.objectType;
+        annotation.groupTag = self.placeType;
         
     }
     
@@ -236,7 +241,8 @@ static int kMax = 2147483647;
     self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", [self.mapView.annotations count]];
 }
 
-- (IBAction)changeClusterMethodButtonTouchUpInside:(UIButton *)sender {
+- (IBAction)changeClusterMethodButtonTouchUpInside:(UIButton *)sender
+{
     [self.mapView removeOverlays:self.mapView.overlays];
     if (self.mapView.clusteringMethod == ClusteringBubbleMethod) {
         [sender setTitle:@"Bubble cluster" forState:UIControlStateNormal];
@@ -249,7 +255,8 @@ static int kMax = 2147483647;
     [self.mapView doClustering];
 }
 
-- (IBAction)clusteringButtonTouchUpInside:(UIButton *)sender {
+- (IBAction)clusteringButtonTouchUpInside:(UIButton *)sender
+{
     [self.mapView removeOverlays:self.mapView.overlays];
     if (self.mapView.clusteringEnabled) {
         [sender setTitle:@"Turn clustering on" forState:UIControlStateNormal];
@@ -262,13 +269,15 @@ static int kMax = 2147483647;
     [self.mapView doClustering];
 }
 
-- (IBAction)removeButtonTouchUpInside:(id)sender {
+- (IBAction)removeButtonTouchUpInside:(id)sender
+{
     [self.mapView removeAnnotations:self.mapView.annotations];
     [self.mapView removeOverlays:self.mapView.overlays];
     self.numberOfAnnotations.text = @"0";
 }
 
-- (IBAction)buttonGroupByTagTouchUpInside:(UIButton *)sender {
+- (IBAction)buttonGroupByTagTouchUpInside:(UIButton *)sender
+{
     self.mapView.clusterByGroupTag = ! self.mapView.clusterByGroupTag;
     if(self.mapView.clusterByGroupTag){
         [sender setTitle:@"Turn groups off" forState:UIControlStateNormal];
@@ -283,7 +292,8 @@ static int kMax = 2147483647;
     [self.mapView doClustering];
 }
 
-- (IBAction)changeGroup:(id)sender {
+- (IBAction)changeGroup:(id)sender
+{
     UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:@"Select another group:" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
                             @"City Parks",
                             @"Restaurants",
@@ -294,28 +304,12 @@ static int kMax = 2147483647;
 
 }
 
-- (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    switch (popup.tag) {
-        case 1: {
-            switch (buttonIndex) {
-                case 0:
-                    self.objectType = @"tree";
-                    break;
-                case 1:
-                    self.objectType = @"restaurant";
-                    break;
-                case 2:
-                    self.objectType = @"coffee";
-                    break;
-                default:
-                    break;
-            }
-            break;
-        }
-        default:
-            break;
+- (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex < self.allTypes.count) {
+        self.placeType = [self.allTypes objectAtIndex:buttonIndex];
     }
+    
 }
 
 - (NSArray *)randomCoordinatesGenerator:(int) numberOfCoordinates

@@ -17,23 +17,7 @@
 
 - (IBAction)menuTapped:(UIButton *)sender {
     MapViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"map"];
-    switch (sender.tag) {
-        case 0:
-            NSLog(@"parks");
-            vc.objectType = @"tree";
-            break;
-        case 1:
-            NSLog(@"restaurants");
-            vc.objectType = @"restaurant";
-            break;
-        case 2:
-            NSLog(@"cafes");
-            vc.objectType = @"coffee";
-            break;
-            
-        default:
-            break;
-    }
+    vc.selectedType = sender.tag;
     
     [UIView animateWithDuration:0.5
                      animations:^{

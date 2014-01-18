@@ -14,6 +14,6 @@
 
 @property (weak, nonatomic) IBOutlet MapView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *menu;
-@property (strong, nonatomic) NSString *objectType;
+@property (nonatomic) NSInteger selectedType;
 
 @end
