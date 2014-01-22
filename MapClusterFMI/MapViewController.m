@@ -89,10 +89,8 @@
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
         FMIMarker *marker = [[FMIMarker alloc] init];
-        marker.markerId = [object.index integerValue];
         marker.coordinate = loc.coordinate;
         marker.title = [NSString stringWithFormat:@"%@", self.placeType];
-        marker.userInfo = @{ @"index": @([object.index integerValue]) };
         [self.clusterer addMarker:marker];
         
     }
@@ -203,10 +201,8 @@
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
         FMIMarker *marker = [[FMIMarker alloc] init];
-        marker.markerId = [object.index integerValue];
         marker.coordinate = loc.coordinate;
         marker.title = [NSString stringWithFormat:@"%@", self.placeType];
-        //        marker.userInfo = @{ @"index": @(idx) };
         [self.clusterer addMarker:marker];
         
     }

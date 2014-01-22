@@ -13,10 +13,8 @@
 
 @interface FMIMarker : NSObject <FMIMarker>
 
-@property (assign, readwrite, nonatomic) NSUInteger markerId;
-@property (copy, readwrite, nonatomic) NSString *title;
-@property (copy, readwrite, nonatomic) NSString *subtitle;
-@property (assign, readwrite, nonatomic) CLLocationCoordinate2D coordinate;
-@property (strong, readwrite, nonatomic) NSDictionary *userInfo;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *subtitle;
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
 @end
