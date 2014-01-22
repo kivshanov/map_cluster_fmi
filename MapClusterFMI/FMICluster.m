@@ -37,7 +37,7 @@
     // coordinate through to the underlying REMarker.
     //
     if (self.markers.count == 1) {
-        REMarker *marker = self.markers.lastObject;
+        FMIMarker *marker = self.markers.lastObject;
         marker.coordinate = coordinate;
     }
 }
@@ -48,7 +48,7 @@
     [self.bounds setExtendedBounds:self.markerClusterer.gridSize];
 }
 
-- (BOOL)isMarkerInClusterBounds:(id<REMarker>)marker
+- (BOOL)isMarkerInClusterBounds:(id<FMIMarker>)marker
 {
     return [self.bounds contains:marker.coordinate];
 }
@@ -56,16 +56,16 @@
 - (NSInteger)markersInClusterFromMarkers:(NSArray *) markers
 {
     NSInteger result = 0;
-    for (id<REMarker>marker in markers) {
+    for (id<FMIMarker>marker in markers) {
         if ([self isMarkerAlreadyAdded:marker])
             result++;
     }
     return result;
 }
 
-- (BOOL)isMarkerAlreadyAdded:(id<REMarker>)marker
+- (BOOL)isMarkerAlreadyAdded:(id<FMIMarker>)marker
 {
-    for (id<REMarker>m in self.markers) {
+    for (id<FMIMarker>m in self.markers) {
         if ([m isEqual:marker])
             return YES;
     }
@@ -78,7 +78,7 @@
     CGFloat y = 0;
     CGFloat z = 0;
     
-    for (id<REMarker>marker in self.markers) {
+    for (id<FMIMarker>marker in self.markers) {
         CGFloat lat = marker.coordinate.latitude * M_PI /  180;
         CGFloat lon = marker.coordinate.longitude * M_PI / 180;
         
@@ -98,7 +98,7 @@
     self.coordinate = CLLocationCoordinate2DMake(lat1, lon1);
 }
 
-- (BOOL)addMarker:(id<REMarker>)marker
+- (BOOL)addMarker:(id<FMIMarker>)marker
 {
     if ([self isMarkerAlreadyAdded:marker])
         return NO;
@@ -122,8 +122,8 @@
     [self.markers addObject:marker];
     
     if (self.markers.count == 1){
-        self.title = ((id<REMarker>)self.markers.lastObject).title;
-        self.subtitle = ((id<REMarker>)self.markers.lastObject).title;
+        self.title = ((id<FMIMarker>)self.markers.lastObject).title;
+        self.subtitle = ((id<FMIMarker>)self.markers.lastObject).title;
     } else{
         self.title = [NSString stringWithFormat:self.markerClusterer.clusterTitle, self.markers.count];
         self.subtitle = @"";
@@ -135,7 +135,7 @@
 - (void)printDescription
 {
     NSLog(@"---- CLUSTER: %@ - %lu ----", self.coordinateTag, (unsigned long)self.markers.count);
-    for (id<REMarker>marker in self.markers) {
+    for (id<FMIMarker>marker in self.markers) {
         NSLog(@"  MARKER: %@-%@", marker.title, marker.subtitle);
     }
 }

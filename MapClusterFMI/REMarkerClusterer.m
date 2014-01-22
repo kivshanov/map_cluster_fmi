@@ -59,7 +59,7 @@
     _mapView.delegate = self;
 }
 
-- (void)addMarker:(id<REMarker>)marker
+- (void)addMarker:(id<FMIMarker>)marker
 {
     [_markers addObject:marker];
 }
@@ -69,7 +69,7 @@
     [_markers addObjectsFromArray:markers];
 }
 
-- (void)removeMarker:(id<REMarker>)marker;
+- (void)removeMarker:(id<FMIMarker>)marker;
 {
     [_markers removeObject:marker];
 }
@@ -82,7 +82,7 @@
 }
 
 
-- (BOOL)markerInBounds:(id<REMarker>)marker
+- (BOOL)markerInBounds:(id<FMIMarker>)marker
 {
     CGPoint pix = [self.mapView convertCoordinate:marker.coordinate toPointToView:nil];
     if (pix.x >=-150 && pix.x <= _mapView.frame.size.width+150) {
@@ -100,7 +100,7 @@
     CLLocationDegrees minLongitude = DBL_MAX;
     CLLocationDegrees maxLongitude = -DBL_MAX;
     
-    for (id<REMarker>annotation in annotations) {
+    for (id<FMIMarker>annotation in annotations) {
         CGFloat annotationLat = annotation.coordinate.latitude;
         CGFloat annotationLong = annotation.coordinate.longitude;
         if (annotationLat == 0 && annotationLong == 0)
@@ -170,7 +170,7 @@
 	return d;
 }
 
-- (void)addToClosestCluster:(id<REMarker>)marker
+- (void)addToClosestCluster:(id<FMIMarker>)marker
 {
     CGFloat distance = 40000; // Some large number
     FMICluster *clusterToAddTo;
@@ -196,7 +196,7 @@
 - (void)createClusters
 {
     [_clusters removeAllObjects];
-    for (id<REMarker>marker in _markers) {
+    for (id<FMIMarker>marker in _markers) {
         if (marker.coordinate.latitude == 0 && marker.coordinate.longitude == 0) 
             continue;
         //if ([self markerInBounds:marker])

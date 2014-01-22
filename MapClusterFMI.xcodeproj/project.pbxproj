@@ -35,7 +35,7 @@
 		A4099D90188FD61F00E297BB /* RELatLngBounds.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D8A188FD61F00E297BB /* RELatLngBounds.m */; };
 		A4099D92188FD61F00E297BB /* REMarkerClusterer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D8E188FD61F00E297BB /* REMarkerClusterer.m */; };
 		A4099D94188FD6FB00E297BB /* Points.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4099D93188FD6FB00E297BB /* Points.plist */; };
-		A4099D99188FF6F700E297BB /* REMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D98188FF6F700E297BB /* REMarker.m */; };
+		A4099D99188FF6F700E297BB /* FMIMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D98188FF6F700E297BB /* FMIMarker.m */; };
 		A4B682201861BFE100E51708 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B6821F1861BFE100E51708 /* MapKit.framework */; };
 		A4B682221861BFF300E51708 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B682211861BFF300E51708 /* CoreLocation.framework */; };
 		A4F414EA188AB42400AFF489 /* Cafe.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F414DE188AB42400AFF489 /* Cafe.png */; };
@@ -101,11 +101,11 @@
 		A4099D88188FD61F00E297BB /* FMICluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMICluster.m; sourceTree = "<group>"; };
 		A4099D89188FD61F00E297BB /* RELatLngBounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RELatLngBounds.h; sourceTree = "<group>"; };
 		A4099D8A188FD61F00E297BB /* RELatLngBounds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RELatLngBounds.m; sourceTree = "<group>"; };
-		A4099D8B188FD61F00E297BB /* REMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMarker.h; sourceTree = "<group>"; };
+		A4099D8B188FD61F00E297BB /* FMIMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMIMarker.h; sourceTree = "<group>"; };
 		A4099D8D188FD61F00E297BB /* REMarkerClusterer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMarkerClusterer.h; sourceTree = "<group>"; };
 		A4099D8E188FD61F00E297BB /* REMarkerClusterer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMarkerClusterer.m; sourceTree = "<group>"; };
 		A4099D93188FD6FB00E297BB /* Points.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Points.plist; sourceTree = "<group>"; };
-		A4099D98188FF6F700E297BB /* REMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMarker.m; sourceTree = "<group>"; };
+		A4099D98188FF6F700E297BB /* FMIMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMIMarker.m; sourceTree = "<group>"; };
 		A4B6821C1861BE2B00E51708 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		A4B6821F1861BFE100E51708 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A4B682211861BFF300E51708 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -268,8 +268,8 @@
 				A4099D88188FD61F00E297BB /* FMICluster.m */,
 				A4099D89188FD61F00E297BB /* RELatLngBounds.h */,
 				A4099D8A188FD61F00E297BB /* RELatLngBounds.m */,
-				A4099D8B188FD61F00E297BB /* REMarker.h */,
-				A4099D98188FF6F700E297BB /* REMarker.m */,
+				A4099D8B188FD61F00E297BB /* FMIMarker.h */,
+				A4099D98188FF6F700E297BB /* FMIMarker.m */,
 				A4099D8D188FD61F00E297BB /* REMarkerClusterer.h */,
 				A4099D8E188FD61F00E297BB /* REMarkerClusterer.m */,
 			);
@@ -419,7 +419,7 @@
 				A4099D92188FD61F00E297BB /* REMarkerClusterer.m in Sources */,
 				0D4F2CCC186EFF6F0011B656 /* CoreDataManager.m in Sources */,
 				0D3DC2FC185F286600FC44F0 /* MenuViewController.m in Sources */,
-				A4099D99188FF6F700E297BB /* REMarker.m in Sources */,
+				A4099D99188FF6F700E297BB /* FMIMarker.m in Sources */,
 				0D3DC2F6185F286600FC44F0 /* AppDelegate.m in Sources */,
 				A4099D90188FD61F00E297BB /* RELatLngBounds.m in Sources */,
 				0D9937A11890A3BD0067358D /* MapObject.m in Sources */,

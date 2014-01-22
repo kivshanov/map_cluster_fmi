@@ -11,7 +11,7 @@
 #import "RELatLngBounds.h"
 
 @class REMarkerClusterer;
-@protocol REMarker;
+@protocol FMIMarker;
 
 @interface FMICluster : NSObject <MKAnnotation>
 
@@ -26,10 +26,10 @@
 @property (strong, readonly, nonatomic) NSString *coordinateTag;
 
 - (id)initWithClusterer:(REMarkerClusterer *)clusterer;
-- (BOOL)isMarkerAlreadyAdded:(id<REMarker>)marker;
+- (BOOL)isMarkerAlreadyAdded:(id<FMIMarker>)marker;
 - (NSInteger)markersInClusterFromMarkers:(NSArray *)markers;
-- (BOOL)addMarker:(id<REMarker>)marker;
-- (BOOL)isMarkerInClusterBounds:(id<REMarker>)marker;
+- (BOOL)addMarker:(id<FMIMarker>)marker;
+- (BOOL)isMarkerInClusterBounds:(id<FMIMarker>)marker;
 - (void)setAverageCenter;
 - (void)printDescription;
 

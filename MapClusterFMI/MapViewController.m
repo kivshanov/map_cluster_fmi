@@ -88,7 +88,7 @@
     for (MapObject *object in randomLocations) {
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
-        REMarker *marker = [[REMarker alloc] init];
+        FMIMarker *marker = [[FMIMarker alloc] init];
         marker.markerId = [object.index integerValue];
         marker.coordinate = loc.coordinate;
         marker.title = [NSString stringWithFormat:@"%@", self.placeType];
@@ -202,7 +202,7 @@
     for (MapObject *object in randomLocations) {
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
-        REMarker *marker = [[REMarker alloc] init];
+        FMIMarker *marker = [[FMIMarker alloc] init];
         marker.markerId = [object.index integerValue];
         marker.coordinate = loc.coordinate;
         marker.title = [NSString stringWithFormat:@"%@", self.placeType];

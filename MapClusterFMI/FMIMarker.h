@@ -8,10 +8,10 @@
 
 #import <MapKit/MapKit.h>
 
-@protocol REMarker <MKAnnotation>
+@protocol FMIMarker <MKAnnotation>
 @end
 
-@interface REMarker : NSObject <REMarker>
+@interface FMIMarker : NSObject <FMIMarker>
 
 @property (assign, readwrite, nonatomic) NSUInteger markerId;
 @property (copy, readwrite, nonatomic) NSString *title;

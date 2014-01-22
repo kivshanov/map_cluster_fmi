@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 FMI Project. All rights reserved.
 //
 
-#import "REMarker.h"
+#import "FMIMarker.h"
 
-@implementation REMarker
+@implementation FMIMarker
 
 @end
