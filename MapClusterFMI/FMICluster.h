@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "RELatLngBounds.h"
+#import "FMIGeographicBounds.h"
 
 @class FMIClusterManager;
 @protocol FMIMarker;
 
 @interface FMICluster : NSObject <MKAnnotation>
 
-@property (strong, readwrite, nonatomic) RELatLngBounds *bounds;
+@property (strong, readwrite, nonatomic) FMIGeographicBounds *bounds;
 @property (weak, readwrite, nonatomic) FMIClusterManager *markerClusterer;
 @property (assign, readwrite, nonatomic) CLLocationCoordinate2D coordinate;
 @property (assign, readwrite, nonatomic) BOOL averageCenter;

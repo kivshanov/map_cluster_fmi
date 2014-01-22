@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 FMI Project. All rights reserved.
 //
 
-#import "RELatLngBounds.h"
+#import "FMIGeographicBounds.h"
 
-@implementation RELatLngBounds
+@implementation FMIGeographicBounds
 
 - (id)initWithMapView:(MKMapView *)mapView
 {

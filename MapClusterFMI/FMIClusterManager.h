@@ -11,7 +11,7 @@
 #import <MapKit/MapKit.h>
 #import <float.h>
 #import "FMIMarker.h"
-#import "RELatLngBounds.h"
+#import "FMIGeographicBounds.h"
 #import "FMICluster.h"
 
 @protocol FMIClusterMarker <MKMapViewDelegate>

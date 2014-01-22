@@ -9,7 +9,7 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CLLocation.h>
 
-@interface RELatLngBounds : NSObject
+@interface FMIGeographicBounds : NSObject
 
 @property (assign, readwrite, nonatomic) CLLocationCoordinate2D northEast;
 @property (assign, readwrite, nonatomic) CLLocationCoordinate2D northWest;
