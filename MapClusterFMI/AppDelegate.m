@@ -15,8 +15,7 @@
 {
     // Override point for customization after application launch.
     //test
-    [CoreDataManager instance];
-    [MapObject insertCoordinatesinDB];
+
     return YES;
 }
 							

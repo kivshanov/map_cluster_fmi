@@ -8,6 +8,8 @@
 
 #import "MenuViewController.h"
 #import "MapViewController.h"
+#import "CoreDataManager.h"
+#import "MapObject.h"
 
 @interface MenuViewController ()
 
@@ -41,6 +43,8 @@
     UISwipeGestureRecognizer *gr = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeAction:)];
     gr.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:gr];
+    [CoreDataManager instance];
+    [MapObject insertCoordinatesinDB];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
