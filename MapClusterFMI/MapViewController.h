@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "MapView.h"
+#import "REMarkerClusterer.h"
 
-@interface MapViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate>
+@interface MapViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate, REMarkerClusterDelegate>
 
-@property (weak, nonatomic) IBOutlet MapView *mapView;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *menu;
 @property (nonatomic) NSInteger selectedType;
+@property (strong, readonly, nonatomic) REMarkerClusterer *clusterer;
 
 @end

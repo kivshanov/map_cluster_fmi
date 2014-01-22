@@ -7,9 +7,6 @@
 //
 
 #import "MapViewController.h"
-#import "SingleAnnotation.h"
-#import "Algorithms.h"
-#import "PinAnnotation.h"
 #import "MapObject.h"
 
 @interface MapViewController () {
@@ -19,9 +16,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAnnotations;
 @property (strong, nonatomic) NSString *placeType;
 @property (strong, nonatomic) NSArray *allTypes;
+
+//@property (strong, readwrite, nonatomic) MKMapView *mapView;
+@property (strong, readwrite, nonatomic) REMarkerClusterer *clusterer;
+
 @end
 
-static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
+//static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
 
 @implementation MapViewController
 
@@ -55,7 +56,6 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
     shownItems = 0;
     self.mapView.delegate = self;
     self.isMenuOpen = YES;
-    self.mapView.clusterSize = kDEFAULTCLUSTERSIZE;
     self.numberOfAnnotations.text = @"0";
     self.allTypes = [NSArray arrayWithObjects:@"Park", @"Restaurant", @"Cafe", nil];
     self.placeType = [self.allTypes objectAtIndex:self.selectedType];
@@ -70,22 +70,50 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
         self.mapView.frame = CGRectMake(0, 20, self.view.bounds.size.width, self.view.bounds.size.height-20);
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }
+    
+    
+    // Create clusterer, assign a map view and delegate (MKMapViewDelegate)
+    //
+    self.clusterer = [[REMarkerClusterer alloc] initWithMapView:self.mapView delegate:self];
+    
+    // Set smaller grid size for an iPad
+    //
+    self.clusterer.gridSize = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 25 : 20;
+    self.clusterer.clusterTitle = @"%i items";
+    
+    shownItems +=20;
+    [self.mapView removeOverlays:self.mapView.overlays];
+    NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomMapObjectsFromDB:shownItems]];
+    
+    for (MapObject *object in randomLocations) {
+        CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
+        
+        REMarker *marker = [[REMarker alloc] init];
+        marker.markerId = [object.index integerValue];
+        marker.coordinate = loc.coordinate;
+        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
+        marker.userInfo = @{ @"index": @([object.index integerValue]) };
+        [self.clusterer addMarker:marker];
+        
+    }
+
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%lu", randomLocations.count];
+    
+
+    // Create clusters (without animations on view load)
+    //
+    [self.clusterer clusterize:NO];
+    
+    // Zoom to show all clusters/markers on the map
+    //
+    [self.clusterer zoomToAnnotationsBounds:self.clusterer.markers];
+    
 }
 
 - (void)viewDidUnload
 {
     [self setMapView:nil];
     [super viewDidUnload];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
 }
 
 - (IBAction)tapAction:(UITapGestureRecognizer *)sender
@@ -138,97 +166,28 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
     }
 }
 
-
-
-- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation
+#pragma mark - MKMapView methods 
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(RECluster *)annotation
 {
-    MKAnnotationView *annotationView;
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+        return nil;
     
-    // if it's a cluster
-    if ([annotation isKindOfClass:[PinAnnotation class]]) {
-        
-        PinAnnotation *clusterAnnotation = (PinAnnotation *)annotation;
-        
-        annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:@"ClusterView"];
-        if (!annotationView) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"ClusterView"];
-            annotationView.canShowCallout = YES;
-            annotationView.centerOffset = CGPointMake(0, -20);
-        }
-        //calculate cluster region
-        CLLocationDistance clusterRadius = self.mapView.region.span.longitudeDelta * self.mapView.clusterSize * 111000 / 2.0f; //static circle size of cluster
-//        CLLocationDistance clusterRadius = self.mapView.region.span.longitudeDelta/log(self.mapView.region.span.longitudeDelta*self.mapView.region.span.longitudeDelta) * log(pow([clusterAnnotation.annotationsInCluster count], 4)) * self.mapView.clusterSize * 50000; //circle size based on number of annotations in cluster
-        
-        MKCircle *circle = [MKCircle circleWithCenterCoordinate:clusterAnnotation.coordinate radius:clusterRadius * cos([annotation coordinate].latitude * M_PI / 180.0)];
-        [circle setTitle:@"background"];
-        [self.mapView addOverlay:circle];
-        
-        MKCircle *circleLine = [MKCircle circleWithCenterCoordinate:clusterAnnotation.coordinate radius:clusterRadius * cos([annotation coordinate].latitude * M_PI / 180.0)];
-        [circleLine setTitle:@"line"];
-        [self.mapView addOverlay:circleLine];
-        
-        // set title
-        clusterAnnotation.title = @"Cluster";
-        clusterAnnotation.subtitle = [NSString stringWithFormat:@"Containing annotations: %d", (int)[clusterAnnotation.annotationsInCluster count]];
-        
-        // set its image
-        annotationView.image = [UIImage imageNamed:@"regular.png"];
-        
-        // change pin image for group
-        if (self.mapView.makeGroups) {
-            annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@s.png", clusterAnnotation.groupTag]];
-            clusterAnnotation.title = [NSString stringWithFormat:@"%@s", clusterAnnotation.groupTag];
-        }
-    }
-    // If it's a single annotation
-    else if([annotation isKindOfClass:[SingleAnnotation class]]){
-        SingleAnnotation *singleAnnotation = (SingleAnnotation *)annotation;
-        annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:@"singleAnnotationView"];
-        if (!annotationView) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:singleAnnotation reuseIdentifier:@"singleAnnotationView"];
-            annotationView.canShowCallout = YES;
-            annotationView.centerOffset = CGPointMake(0, -20);
-        }
-        singleAnnotation.title = singleAnnotation.groupTag;
-        annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", singleAnnotation.groupTag]];
-    }
-    // Error
-    else{
-        annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:@"errorAnnotationView"];
-        if (!annotationView) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"errorAnnotationView"];
-            annotationView.canShowCallout = NO;
-            ((MKPinAnnotationView *)annotationView).pinColor = MKPinAnnotationColorRed;
-        }
-    }
-    
-    return annotationView;
-}
+    static NSString *pinID;
+    static NSString *defaultPinID = @"REDefaultPin";
+    pinID = defaultPinID;
 
-- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
-{
-    MKCircle *circle = overlay;
-    MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
     
-    if ([circle.title isEqualToString:@"background"])
-    {
-        circleView.fillColor = [UIColor redColor];
-        circleView.alpha = 0.25;
-    } else
-    {
-        circleView.strokeColor = [UIColor blackColor];
-        circleView.lineWidth = 0.8;
+	MKPinAnnotationView *pinView = (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:pinID];
+    
+	if (pinView == nil) {
+		pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pinID];
+        pinView.canShowCallout = YES;
     }
     
-    return circleView;
+    pinView.image = [UIImage imageNamed:annotation.markers.count == 1 ? [NSString stringWithFormat:@"%@.png", self.placeType] : [NSString stringWithFormat:@"%@s.png", self.placeType]];
+    
+    return pinView;
 }
-
-- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated
-{
-    [self.mapView removeOverlays:self.mapView.overlays];
-    [self.mapView divideElementsIntoClusters];
-}
-
 
 
 // ==============================
@@ -239,70 +198,33 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
     shownItems +=20;
     [self.mapView removeOverlays:self.mapView.overlays];
     NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomMapObjectsFromDB:shownItems]];
-    NSMutableSet *annotationsToAdd = [[NSMutableSet alloc] init];
     
-    for (CLLocation *loc in randomLocations) {
-        SingleAnnotation *annotation = [[SingleAnnotation alloc] initWithCoordinate:loc.coordinate];
-        [annotationsToAdd addObject:annotation];
+    for (MapObject *object in randomLocations) {
+        CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
-        // add to group if specified
-        annotation.groupTag = self.placeType;
+        REMarker *marker = [[REMarker alloc] init];
+        marker.markerId = [object.index integerValue];
+        marker.coordinate = loc.coordinate;
+        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
+        //        marker.userInfo = @{ @"index": @(idx) };
+        [self.clusterer addMarker:marker];
         
     }
     
-    [self.mapView addAnnotations:[annotationsToAdd allObjects]];
-    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", (int)[self.mapView.annotations count]];
-}
-
-- (IBAction)changeClusterMethodButtonTouchUpInside:(UIButton *)sender
-{
-    [self.mapView removeOverlays:self.mapView.overlays];
-    if (self.mapView.clusterMethodType == ClusteringBubbleMethod) {
-        [sender setTitle:@"Bubble cluster" forState:UIControlStateNormal];
-        self.mapView.clusterMethodType = ClusteringGridMethod;
-    }
-    else{
-        [sender setTitle:@"Grid cluster" forState:UIControlStateNormal];
-        self.mapView.clusterMethodType = ClusteringBubbleMethod;
-    }
-    [self.mapView divideElementsIntoClusters];
-}
-
-- (IBAction)clusteringButtonTouchUpInside:(UIButton *)sender
-{
-    [self.mapView removeOverlays:self.mapView.overlays];
-    if (self.mapView.enableClustering) {
-        [sender setTitle:@"Turn clustering on" forState:UIControlStateNormal];
-        self.mapView.enableClustering = NO;
-    }
-    else{
-        [sender setTitle:@"Turn clustering off" forState:UIControlStateNormal];
-        self.mapView.enableClustering = YES;
-    }
-    [self.mapView divideElementsIntoClusters];
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%lu", shownItems];
+    
+    // Zoom to show all clusters/markers on the map
+    //
+    [self.clusterer zoomToAnnotationsBounds:self.clusterer.markers];
 }
 
 - (IBAction)removeButton:(id)sender
 {
     [self.mapView removeAnnotations:self.mapView.annotations];
     [self.mapView removeOverlays:self.mapView.overlays];
+    [self.clusterer removeAllMarkers];
+    shownItems = 0;
     self.numberOfAnnotations.text = @"0";
-}
-
-- (IBAction)buttonGroup:(UIButton *)sender
-{
-    self.mapView.makeGroups = ! self.mapView.makeGroups;
-    if(self.mapView.makeGroups){
-        [sender setTitle:@"Turn groups off" forState:UIControlStateNormal];
-        self.mapView.clusterSize = kDEFAULTCLUSTERSIZE * 2.0;
-    }
-    else{
-        [sender setTitle:@"Turn groups on" forState:UIControlStateNormal];
-        self.mapView.clusterSize = kDEFAULTCLUSTERSIZE;
-    }
-    
-    [self.mapView removeOverlays:self.mapView.overlays];
-    [self.mapView divideElementsIntoClusters];
 }
 
 - (IBAction)changeGroup:(id)sender
@@ -327,15 +249,7 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
 
 - (NSArray *)randomMapObjectsFromDB:(NSInteger)count
 {
-    NSMutableArray *result = [NSMutableArray array];
-    NSArray *objects = [MapObject getObjectsForMaxIndex:count];
-    
-    for(MapObject *object in objects) {
-        CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
-        [result addObject:loc];
-    }
-
-    return  result;
+    return  [MapObject getObjectsForMaxIndex:count];
 }
 
 @end
