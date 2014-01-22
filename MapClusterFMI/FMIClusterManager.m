@@ -8,20 +8,20 @@
 
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
-#import "REMarkerClusterer.h"
+#import "FMIClusterManager.h"
 #import "FMICluster.h"
 
 #define mixesKey @"mixesKey"
 #define mergeatorsKey @"remainedKey"
 
-@interface REMarkerClusterer ()
+@interface FMIClusterManager ()
 
 @property (assign, readwrite, nonatomic) BOOL animating;
 @property (strong, readonly, nonatomic) NSArray *markerAnnotations;
 
 @end
 
-@implementation REMarkerClusterer
+@implementation FMIClusterManager
 
 - (id)init
 {
@@ -41,7 +41,7 @@
     return self;
 }
 
-- (id)initWithMapView:(MKMapView *)mapView delegate:(id<REMarkerClusterDelegate>)delegate
+- (id)initWithMapView:(MKMapView *)mapView delegate:(id<FMIClusterMarker>)delegate
 {
     self = [self init];
     if (!self)

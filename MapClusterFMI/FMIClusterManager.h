@@ -14,15 +14,15 @@
 #import "RELatLngBounds.h"
 #import "FMICluster.h"
 
-@protocol REMarkerClusterDelegate <MKMapViewDelegate>
+@protocol FMIClusterMarker <MKMapViewDelegate>
 
 @optional
 
-- (void)markerClusterer:(REMarkerClusterer *)markerCluster withMapView:(MKMapView *)mapView updateViewOfAnnotation:(id<MKAnnotation>)annotation withView:(MKAnnotationView *)annotationView;
+- (void)markerClusterer:(FMIClusterManager *)markerCluster withMapView:(MKMapView *)mapView updateViewOfAnnotation:(id<MKAnnotation>)annotation withView:(MKAnnotationView *)annotationView;
 
 @end
 
-@interface REMarkerClusterer : NSObject <MKMapViewDelegate> {
+@interface FMIClusterManager : NSObject <MKMapViewDelegate> {
     NSMutableArray *_tempViews;
     BOOL _animated;
 }
@@ -34,11 +34,11 @@
 @property (assign, readwrite, nonatomic) BOOL isAverageCenter;
 @property (assign, readwrite, nonatomic) CGFloat maxDelayOfSplitAnimation;
 @property (assign, readwrite, nonatomic) CGFloat maxDurationOfSplitAnimation;
-@property (weak, readwrite, nonatomic) id<REMarkerClusterDelegate> delegate;
+@property (weak, readwrite, nonatomic) id<FMIClusterMarker> delegate;
 @property (copy, readwrite, nonatomic) NSString *clusterTitle;
 @property (assign, readonly, nonatomic) BOOL animating;
 
-- (id)initWithMapView:(MKMapView *)mapView delegate:(id <REMarkerClusterDelegate>)delegate;
+- (id)initWithMapView:(MKMapView *)mapView delegate:(id <FMIClusterMarker>)delegate;
 - (void)addMarker:(id<FMIMarker>)marker;
 - (void)addMarkers:(NSArray*)markers;
 - (void)removeMarker:(id<FMIMarker>)marker;

@@ -7,7 +7,7 @@
 //
 
 #import "FMICluster.h"
-#import "REMarkerClusterer.h"
+#import "FMIClusterManager.h"
 
 @interface FMICluster ()
 
@@ -17,7 +17,7 @@
 
 @implementation FMICluster
 
-- (id)initWithClusterer:(REMarkerClusterer *)clusterer
+- (id)initWithClusterer:(FMIClusterManager *)clusterer
 {
     if ((self = [super init])) {
         self.markerClusterer = clusterer;

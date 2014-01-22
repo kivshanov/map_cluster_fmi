@@ -18,7 +18,7 @@
 @property (strong, nonatomic) NSArray *allTypes;
 
 //@property (strong, readwrite, nonatomic) MKMapView *mapView;
-@property (strong, readwrite, nonatomic) REMarkerClusterer *clusterer;
+@property (strong, readwrite, nonatomic) FMIClusterManager *clusterer;
 
 @end
 
@@ -74,7 +74,7 @@
     
     // Create clusterer, assign a map view and delegate (MKMapViewDelegate)
     //
-    self.clusterer = [[REMarkerClusterer alloc] initWithMapView:self.mapView delegate:self];
+    self.clusterer = [[FMIClusterManager alloc] initWithMapView:self.mapView delegate:self];
     
     // Set smaller grid size for an iPad
     //

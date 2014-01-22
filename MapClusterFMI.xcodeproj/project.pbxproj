@@ -33,7 +33,7 @@
 		0DC14F8F1890D0F900C5D47F /* arr.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DC14F8E1890D0F900C5D47F /* arr.png */; };
 		A4099D8F188FD61F00E297BB /* FMICluster.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D88188FD61F00E297BB /* FMICluster.m */; };
 		A4099D90188FD61F00E297BB /* RELatLngBounds.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D8A188FD61F00E297BB /* RELatLngBounds.m */; };
-		A4099D92188FD61F00E297BB /* REMarkerClusterer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D8E188FD61F00E297BB /* REMarkerClusterer.m */; };
+		A4099D92188FD61F00E297BB /* FMIClusterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D8E188FD61F00E297BB /* FMIClusterManager.m */; };
 		A4099D94188FD6FB00E297BB /* Points.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4099D93188FD6FB00E297BB /* Points.plist */; };
 		A4099D99188FF6F700E297BB /* FMIMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = A4099D98188FF6F700E297BB /* FMIMarker.m */; };
 		A4B682201861BFE100E51708 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B6821F1861BFE100E51708 /* MapKit.framework */; };
@@ -102,8 +102,8 @@
 		A4099D89188FD61F00E297BB /* RELatLngBounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RELatLngBounds.h; sourceTree = "<group>"; };
 		A4099D8A188FD61F00E297BB /* RELatLngBounds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RELatLngBounds.m; sourceTree = "<group>"; };
 		A4099D8B188FD61F00E297BB /* FMIMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMIMarker.h; sourceTree = "<group>"; };
-		A4099D8D188FD61F00E297BB /* REMarkerClusterer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REMarkerClusterer.h; sourceTree = "<group>"; };
-		A4099D8E188FD61F00E297BB /* REMarkerClusterer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REMarkerClusterer.m; sourceTree = "<group>"; };
+		A4099D8D188FD61F00E297BB /* FMIClusterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMIClusterManager.h; sourceTree = "<group>"; };
+		A4099D8E188FD61F00E297BB /* FMIClusterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMIClusterManager.m; sourceTree = "<group>"; };
 		A4099D93188FD6FB00E297BB /* Points.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Points.plist; sourceTree = "<group>"; };
 		A4099D98188FF6F700E297BB /* FMIMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMIMarker.m; sourceTree = "<group>"; };
 		A4B6821C1861BE2B00E51708 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
@@ -270,8 +270,8 @@
 				A4099D8A188FD61F00E297BB /* RELatLngBounds.m */,
 				A4099D8B188FD61F00E297BB /* FMIMarker.h */,
 				A4099D98188FF6F700E297BB /* FMIMarker.m */,
-				A4099D8D188FD61F00E297BB /* REMarkerClusterer.h */,
-				A4099D8E188FD61F00E297BB /* REMarkerClusterer.m */,
+				A4099D8D188FD61F00E297BB /* FMIClusterManager.h */,
+				A4099D8E188FD61F00E297BB /* FMIClusterManager.m */,
 			);
 			name = Algorithm;
 			sourceTree = "<group>";
@@ -416,7 +416,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4099D92188FD61F00E297BB /* REMarkerClusterer.m in Sources */,
+				A4099D92188FD61F00E297BB /* FMIClusterManager.m in Sources */,
 				0D4F2CCC186EFF6F0011B656 /* CoreDataManager.m in Sources */,
 				0D3DC2FC185F286600FC44F0 /* MenuViewController.m in Sources */,
 				A4099D99188FF6F700E297BB /* FMIMarker.m in Sources */,

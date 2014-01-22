@@ -10,13 +10,13 @@
 #import <CoreLocation/CoreLocation.h>
 #import "RELatLngBounds.h"
 
-@class REMarkerClusterer;
+@class FMIClusterManager;
 @protocol FMIMarker;
 
 @interface FMICluster : NSObject <MKAnnotation>
 
 @property (strong, readwrite, nonatomic) RELatLngBounds *bounds;
-@property (weak, readwrite, nonatomic) REMarkerClusterer *markerClusterer;
+@property (weak, readwrite, nonatomic) FMIClusterManager *markerClusterer;
 @property (assign, readwrite, nonatomic) CLLocationCoordinate2D coordinate;
 @property (assign, readwrite, nonatomic) BOOL averageCenter;
 @property (assign, nonatomic) BOOL hasCenter;
@@ -25,7 +25,7 @@
 @property (strong, nonatomic) NSMutableArray *markers;
 @property (strong, readonly, nonatomic) NSString *coordinateTag;
 
-- (id)initWithClusterer:(REMarkerClusterer *)clusterer;
+- (id)initWithClusterer:(FMIClusterManager *)clusterer;
 - (BOOL)isMarkerAlreadyAdded:(id<FMIMarker>)marker;
 - (NSInteger)markersInClusterFromMarkers:(NSArray *)markers;
 - (BOOL)addMarker:(id<FMIMarker>)marker;

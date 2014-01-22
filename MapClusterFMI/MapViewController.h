@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "REMarkerClusterer.h"
+#import "FMIClusterManager.h"
 
-@interface MapViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate, REMarkerClusterDelegate>
+@interface MapViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate, FMIClusterMarker>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *menu;
 @property (nonatomic) NSInteger selectedType;
-@property (strong, readonly, nonatomic) REMarkerClusterer *clusterer;
+@property (strong, readonly, nonatomic) FMIClusterManager *clusterer;
 
 @end
