@@ -167,7 +167,7 @@
 }
 
 #pragma mark - MKMapView methods 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(FMICluster *)annotation
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(FMIClusterObject *)annotation
 {
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;

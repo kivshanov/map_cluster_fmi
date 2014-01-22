@@ -1,5 +1,5 @@
 //
-// RELatLngBounds.m
+// FMIGeographicBounds
 //  MapClusterFMI
 //
 //  Created by Nikolay Kivshanov  on 01/18/14.
@@ -10,6 +10,15 @@
 
 @implementation FMIGeographicBounds
 
+
+- (void)setSouthWest:(CLLocationCoordinate2D)sw northEast:(CLLocationCoordinate2D)ne
+{
+    _southWest = sw;
+    _northEast = ne;
+    _southEast = CLLocationCoordinate2DMake(sw.latitude, ne.longitude);
+    _northWest = CLLocationCoordinate2DMake(ne.latitude, sw.longitude);
+}
+
 - (id)initWithMapView:(MKMapView *)mapView
 {
     if ((self = [super init])) {
@@ -18,12 +27,19 @@
     return self;
 }
 
-- (void)setSouthWest:(CLLocationCoordinate2D)sw northEast:(CLLocationCoordinate2D)ne
+
+- (bool)contains:(CLLocationCoordinate2D)coordinate
 {
-    _southWest = sw;
-    _northEast = ne;
-    _southEast = CLLocationCoordinate2DMake(sw.latitude, ne.longitude);
-    _northWest = CLLocationCoordinate2DMake(ne.latitude, sw.longitude);
+    CGPoint point = [_mapView convertCoordinate:coordinate toPointToView:_mapView];
+    CGPoint topLeft = [_mapView convertCoordinate:_northWest toPointToView:_mapView];
+    CGPoint bottomRight = [_mapView convertCoordinate:_southEast toPointToView:_mapView];
+    CGPoint topRight = [_mapView convertCoordinate:_northEast toPointToView:_mapView];
+    
+    if (point.x >= topLeft.x && point.x <= topRight.x)
+        if (point.y >= topLeft.y && point.y <= bottomRight.y)
+            return YES;
+    
+    return NO;
 }
 
 - (void)setExtendedBounds:(NSInteger)gridSize
@@ -48,18 +64,6 @@
     _northWest = CLLocationCoordinate2DMake(ne.latitude, sw.longitude);
 }
 
-- (bool)contains:(CLLocationCoordinate2D)coordinate
-{
-    CGPoint point = [_mapView convertCoordinate:coordinate toPointToView:_mapView];
-    CGPoint topLeft = [_mapView convertCoordinate:_northWest toPointToView:_mapView];
-    CGPoint bottomRight = [_mapView convertCoordinate:_southEast toPointToView:_mapView];
-    CGPoint topRight = [_mapView convertCoordinate:_northEast toPointToView:_mapView];
 
-    if (point.x >= topLeft.x && point.x <= topRight.x)
-        if (point.y >= topLeft.y && point.y <= bottomRight.y)
-            return YES;
-    
-    return NO;
-}
 
 @end

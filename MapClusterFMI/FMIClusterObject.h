@@ -1,5 +1,5 @@
 //
-//  ReCluster.h
+//  FMICluster
 //  MapClusterFMI
 //
 //  Created by Pavlina Gatova on 01/18/14.
@@ -13,7 +13,7 @@
 @class FMIClusterManager;
 @protocol FMIMarker;
 
-@interface FMICluster : NSObject <MKAnnotation>
+@interface FMIClusterObject : NSObject <MKAnnotation>
 
 @property (strong, readwrite, nonatomic) FMIGeographicBounds *bounds;
 @property (weak, readwrite, nonatomic) FMIClusterManager *markerClusterer;

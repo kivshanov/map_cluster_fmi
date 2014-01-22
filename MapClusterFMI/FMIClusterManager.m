@@ -1,5 +1,5 @@
 //
-// REMarkerClusterer.m
+// FMIClusterMarker
 //  MapClusterFMI
 //
 //  Created by Pavlina Gatova on 01/18/14.
@@ -9,7 +9,7 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "FMIClusterManager.h"
-#import "FMICluster.h"
+#import "FMIClusterObject.h"
 
 #define mixesKey @"mixesKey"
 #define mergeatorsKey @"remainedKey"
@@ -93,6 +93,90 @@
     return NO;
 }
 
+
+- (void)setMapRegionForMinLat:(CGFloat)minLatitude minLong:(CGFloat)minLongitude maxLat:(CGFloat)maxLatitude maxLong:(CGFloat)maxLongitude
+{    
+    MKCoordinateRegion region;
+    region.center.latitude = (minLatitude + maxLatitude) / 2;
+    region.center.longitude = (minLongitude + maxLongitude) / 2;
+    region.span.latitudeDelta = (maxLatitude - minLatitude);
+    region.span.longitudeDelta = (maxLongitude - minLongitude);
+    
+    if (region.span.latitudeDelta < 0.059863)
+        region.span.latitudeDelta = 0.059863;
+    
+    if (region.span.longitudeDelta < 0.059863)
+        region.span.longitudeDelta = 0.059863;
+    
+    // MKMapView BUG: this snaps to the nearest whole zoom level, which is wrong- it doesn't respect the exact region you asked for. See http://stackoverflow.com/questions/1383296/why-mkmapview-region-is-different-than-requested
+    //
+    if ((region.center.latitude >= -90) && (region.center.latitude <= 90) && (region.center.longitude >= -180) && (region.center.longitude <= 180)) {
+        [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
+    }
+}
+
+- (CGFloat)distanceBetweenPoints:(CLLocationCoordinate2D)p1 p2:(CLLocationCoordinate2D)p2
+{
+	CGFloat R = 6371; // Radius of the Earth in km
+	CGFloat dLat = (p2.latitude - p1.latitude) * M_PI / 180;
+	CGFloat dLon = (p2.longitude - p1.longitude) * M_PI / 180;
+	CGFloat a = sin(dLat / 2) * sin(dLat / 2) + cos(p1.latitude * M_PI / 180) * cos(p2.latitude * M_PI / 180) * sin(dLon / 2) * sin(dLon / 2);
+	CGFloat c = 2 * atan2(sqrt(a), sqrt(1 - a));
+	CGFloat d = R * c;
+	return d;
+}
+
+- (void)addToClosestCluster:(id<FMIMarker>)marker
+{
+    CGFloat distance = 40000; // Some large number
+    FMIClusterObject *clusterToAddTo;
+    for (FMIClusterObject *cluster in _clusters) {
+        if ([cluster hasCenter]) {
+            CGFloat d = [self distanceBetweenPoints:cluster.coordinate p2:marker.coordinate];
+            if (d < distance) {
+                distance = d;
+                clusterToAddTo = cluster;
+            }
+        }
+    }
+    
+    if (clusterToAddTo && [clusterToAddTo isMarkerInClusterBounds:marker]) {
+        [clusterToAddTo addMarker:marker];
+    } else {
+        FMIClusterObject *cluster = [[FMIClusterObject alloc] initWithClusterer:self];
+        [cluster addMarker:marker];
+        [_clusters addObject:cluster];
+    }
+}
+
+- (void)createClusters
+{
+    [_clusters removeAllObjects];
+    for (id<FMIMarker>marker in _markers) {
+        if (marker.coordinate.latitude == 0 && marker.coordinate.longitude == 0) 
+            continue;
+        //if ([self markerInBounds:marker])
+             [self addToClosestCluster:marker];
+    }
+}
+
+- (void)clusterize
+{
+    [self clusterize:YES];
+}
+
+- (void)addObject:(id) object toDictionary:(NSMutableDictionary *)dictionary withKey:(NSString *)key
+{
+    NSMutableArray *objectInKey = [dictionary objectForKey:key];
+    if(objectInKey == nil){
+        objectInKey = [NSMutableArray arrayWithCapacity:0];
+        [objectInKey addObject:object];
+        [dictionary setObject:objectInKey forKey:key];
+    }else{
+        [objectInKey addObject:object];
+    }
+}
+
 - (void)zoomToAnnotationsBounds:(NSArray *)annotations
 {
     CLLocationDegrees minLatitude = DBL_MAX;
@@ -138,89 +222,6 @@
     [self setMapRegionForMinLat:minLatitude minLong:minLongitude maxLat:maxLatitude maxLong:maxLongitude];
 }
 
-- (void)setMapRegionForMinLat:(CGFloat)minLatitude minLong:(CGFloat)minLongitude maxLat:(CGFloat)maxLatitude maxLong:(CGFloat)maxLongitude
-{    
-    MKCoordinateRegion region;
-    region.center.latitude = (minLatitude + maxLatitude) / 2;
-    region.center.longitude = (minLongitude + maxLongitude) / 2;
-    region.span.latitudeDelta = (maxLatitude - minLatitude);
-    region.span.longitudeDelta = (maxLongitude - minLongitude);
-    
-    if (region.span.latitudeDelta < 0.059863)
-        region.span.latitudeDelta = 0.059863;
-    
-    if (region.span.longitudeDelta < 0.059863)
-        region.span.longitudeDelta = 0.059863;
-    
-    // MKMapView BUG: this snaps to the nearest whole zoom level, which is wrong- it doesn't respect the exact region you asked for. See http://stackoverflow.com/questions/1383296/why-mkmapview-region-is-different-than-requested
-    //
-    if ((region.center.latitude >= -90) && (region.center.latitude <= 90) && (region.center.longitude >= -180) && (region.center.longitude <= 180)) {
-        [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
-    }
-}
-
-- (CGFloat)distanceBetweenPoints:(CLLocationCoordinate2D)p1 p2:(CLLocationCoordinate2D)p2
-{
-	CGFloat R = 6371; // Radius of the Earth in km
-	CGFloat dLat = (p2.latitude - p1.latitude) * M_PI / 180;
-	CGFloat dLon = (p2.longitude - p1.longitude) * M_PI / 180;
-	CGFloat a = sin(dLat / 2) * sin(dLat / 2) + cos(p1.latitude * M_PI / 180) * cos(p2.latitude * M_PI / 180) * sin(dLon / 2) * sin(dLon / 2);
-	CGFloat c = 2 * atan2(sqrt(a), sqrt(1 - a));
-	CGFloat d = R * c;
-	return d;
-}
-
-- (void)addToClosestCluster:(id<FMIMarker>)marker
-{
-    CGFloat distance = 40000; // Some large number
-    FMICluster *clusterToAddTo;
-    for (FMICluster *cluster in _clusters) {
-        if ([cluster hasCenter]) {
-            CGFloat d = [self distanceBetweenPoints:cluster.coordinate p2:marker.coordinate];
-            if (d < distance) {
-                distance = d;
-                clusterToAddTo = cluster;
-            }
-        }
-    }
-    
-    if (clusterToAddTo && [clusterToAddTo isMarkerInClusterBounds:marker]) {
-        [clusterToAddTo addMarker:marker];
-    } else {
-        FMICluster *cluster = [[FMICluster alloc] initWithClusterer:self];
-        [cluster addMarker:marker];
-        [_clusters addObject:cluster];
-    }
-}
-
-- (void)createClusters
-{
-    [_clusters removeAllObjects];
-    for (id<FMIMarker>marker in _markers) {
-        if (marker.coordinate.latitude == 0 && marker.coordinate.longitude == 0) 
-            continue;
-        //if ([self markerInBounds:marker])
-             [self addToClosestCluster:marker];
-    }
-}
-
-- (void)clusterize
-{
-    [self clusterize:YES];
-}
-
-- (void)addObject:(id) object toDictionary:(NSMutableDictionary *)dictionary withKey:(NSString *)key
-{
-    NSMutableArray *objectInKey = [dictionary objectForKey:key];
-    if(objectInKey == nil){
-        objectInKey = [NSMutableArray arrayWithCapacity:0];
-        [objectInKey addObject:object];
-        [dictionary setObject:objectInKey forKey:key];
-    }else{
-        [objectInKey addObject:object];
-    }
-}
-
 - (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber
 {
     float diff = bigNumber - smallNumber;
@@ -234,10 +235,10 @@
     
     for (NSString *mergeatorKey in [mergeators allKeys]){
         NSArray *annotations = [mixes objectForKey:mergeatorKey];
-        FMICluster *endCluster = [mergeators objectForKey:mergeatorKey];
+        FMIClusterObject *endCluster = [mergeators objectForKey:mergeatorKey];
         
         if (_animated) {
-            for (FMICluster *annotation in annotations) {
+            for (FMIClusterObject *annotation in annotations) {
                 [_mapView addAnnotation:annotation];
                 if(annotation.coordinate.latitude != endCluster.coordinate.latitude || annotation.coordinate.longitude != endCluster.coordinate.longitude) {
                     CLLocationCoordinate2D realCoordinate = annotation.coordinate;
@@ -264,46 +265,6 @@
     }
 }
 
-- (void)joinAnnotationsWithDictionary:(NSDictionary *)dictionary
-{
-    NSDictionary *mergeators = [dictionary objectForKey:mergeatorsKey];
-    NSDictionary *mixes = [dictionary objectForKey:mixesKey];
-    
-    for (NSString *mergeatorKey in [mergeators allKeys]) {
-        NSArray *annotations = [mixes objectForKey:mergeatorKey];
-        FMICluster *endCluster = [mergeators objectForKey:mergeatorKey];
-        for (FMICluster *annotation in annotations){
-            if (_animated) {
-                _animating = YES;
-                __typeof (&*self) __weak weakSelf = self;
-                [UIView animateWithDuration:[self randomFloatBetween:0.25 and:_maxDurationOfSplitAnimation] delay:[self randomFloatBetween:0 and:_maxDelayOfSplitAnimation]
-                                    options:UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
-                                 animations:^{
-                                     annotation.coordinate = endCluster.coordinate;
-                                 }  completion:^(BOOL finished){
-                                     weakSelf.animating = NO;
-                                     if (annotation != [annotations lastObject]) {
-                                         [weakSelf.mapView removeAnnotation:annotation];
-                                     } else {
-                                         [_mapView removeAnnotation:annotation];
-                                         [_mapView addAnnotation:annotation];
-                                     }
-                                 }];
-            }else{
-                [_mapView removeAnnotations:annotations];
-                [_mapView addAnnotation:endCluster];
-            }
-            ((FMICluster *)[annotations lastObject]).title = endCluster.title;
-            ((FMICluster *)[annotations lastObject]).subtitle = endCluster.subtitle;
-            MKAnnotationView *view = [_mapView viewForAnnotation:(_animated)?[annotations lastObject]:endCluster];
-            [[view superview] bringSubviewToFront:view];
-            if (_animated) ((FMICluster *)[annotations lastObject]).markers = endCluster.markers;
-            if ([self.delegate respondsToSelector:@selector(markerClusterer:withMapView:updateViewOfAnnotation:withView:)]) {
-                [self.delegate markerClusterer:self withMapView:_mapView updateViewOfAnnotation:annotation withView:[_mapView viewForAnnotation:annotation]];
-            }
-        }
-    }
-}
 
 - (void)clusterize:(BOOL)animated
 {
@@ -317,12 +278,12 @@
     NSMutableDictionary *mixDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
     NSMutableArray *remainingAnnotations = [NSMutableArray arrayWithCapacity:0];
     
-    for (FMICluster *cluster in ((self.markerAnnotations.count > _clusters.count) ? self.markerAnnotations : _clusters)) {
+    for (FMIClusterObject *cluster in ((self.markerAnnotations.count > _clusters.count) ? self.markerAnnotations : _clusters)) {
         if ([cluster isKindOfClass:[MKUserLocation class]])
             continue;
         NSInteger numberOfMarkers = 1;
         NSMutableArray *posiblesArrays = [NSMutableArray arrayWithCapacity:0];
-        for (FMICluster *cluster2 in ((self.markerAnnotations.count <= _clusters.count)?self.markerAnnotations:_clusters)) {
+        for (FMIClusterObject *cluster2 in ((self.markerAnnotations.count <= _clusters.count)?self.markerAnnotations:_clusters)) {
             if ([cluster2 isKindOfClass:[MKUserLocation class]])
                 continue;
             NSInteger markers = [cluster markersInClusterFromMarkers:cluster2.markers];
@@ -333,25 +294,25 @@
         }
         
         if (posiblesArrays.count == 1) {
-            [self addObject:cluster toDictionary:mixDictionary withKey:((FMICluster *)[posiblesArrays lastObject]).coordinateTag];
+            [self addObject:cluster toDictionary:mixDictionary withKey:((FMIClusterObject *)[posiblesArrays lastObject]).coordinateTag];
         } else if(posiblesArrays.count == 0) {
             [remainingAnnotations addObject:cluster];
         } else {
             NSInteger minor = INT16_MAX;
             NSInteger index = posiblesArrays.count-1;
-            for (FMICluster *cluster in posiblesArrays) {
+            for (FMIClusterObject *cluster in posiblesArrays) {
                 if (cluster.markers.count < minor) {
                     index = [posiblesArrays indexOfObject:cluster];
                     minor = cluster.markers.count;
                 }
             }
-            [self addObject:cluster toDictionary:mixDictionary withKey:((FMICluster *)[posiblesArrays objectAtIndex:index]).coordinateTag];
+            [self addObject:cluster toDictionary:mixDictionary withKey:((FMIClusterObject *)[posiblesArrays objectAtIndex:index]).coordinateTag];
         }
     }
     
     NSMutableDictionary *mergeators = [NSMutableDictionary dictionaryWithCapacity:0];
     
-    for (FMICluster *cluster in ((self.markerAnnotations.count <= _clusters.count) ? self.markerAnnotations : _clusters)) {
+    for (FMIClusterObject *cluster in ((self.markerAnnotations.count <= _clusters.count) ? self.markerAnnotations : _clusters)) {
         if ([cluster isKindOfClass:[MKUserLocation class]])
             continue;
         [mergeators setObject:cluster forKey:cluster.coordinateTag];
@@ -378,6 +339,48 @@
 - (CGPoint)findClosestAnnotationX:(CGFloat)x y:(CGFloat)y
 {
     return [self findClosestAnnotationX:x y:y views:_tempViews];
+}
+
+
+- (void)joinAnnotationsWithDictionary:(NSDictionary *)dictionary
+{
+    NSDictionary *mergeators = [dictionary objectForKey:mergeatorsKey];
+    NSDictionary *mixes = [dictionary objectForKey:mixesKey];
+    
+    for (NSString *mergeatorKey in [mergeators allKeys]) {
+        NSArray *annotations = [mixes objectForKey:mergeatorKey];
+        FMIClusterObject *endCluster = [mergeators objectForKey:mergeatorKey];
+        for (FMIClusterObject *annotation in annotations){
+            if (_animated) {
+                _animating = YES;
+                __typeof (&*self) __weak weakSelf = self;
+                [UIView animateWithDuration:[self randomFloatBetween:0.25 and:_maxDurationOfSplitAnimation] delay:[self randomFloatBetween:0 and:_maxDelayOfSplitAnimation]
+                                    options:UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
+                                 animations:^{
+                                     annotation.coordinate = endCluster.coordinate;
+                                 }  completion:^(BOOL finished){
+                                     weakSelf.animating = NO;
+                                     if (annotation != [annotations lastObject]) {
+                                         [weakSelf.mapView removeAnnotation:annotation];
+                                     } else {
+                                         [_mapView removeAnnotation:annotation];
+                                         [_mapView addAnnotation:annotation];
+                                     }
+                                 }];
+            }else{
+                [_mapView removeAnnotations:annotations];
+                [_mapView addAnnotation:endCluster];
+            }
+            ((FMIClusterObject *)[annotations lastObject]).title = endCluster.title;
+            ((FMIClusterObject *)[annotations lastObject]).subtitle = endCluster.subtitle;
+            MKAnnotationView *view = [_mapView viewForAnnotation:(_animated)?[annotations lastObject]:endCluster];
+            [[view superview] bringSubviewToFront:view];
+            if (_animated) ((FMIClusterObject *)[annotations lastObject]).markers = endCluster.markers;
+            if ([self.delegate respondsToSelector:@selector(markerClusterer:withMapView:updateViewOfAnnotation:withView:)]) {
+                [self.delegate markerClusterer:self withMapView:_mapView updateViewOfAnnotation:annotation withView:[_mapView viewForAnnotation:annotation]];
+            }
+        }
+    }
 }
 
 - (CGPoint)findClosestAnnotationX:(CGFloat)x y:(CGFloat)y views:(NSArray *)views

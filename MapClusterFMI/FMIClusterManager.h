@@ -1,5 +1,5 @@
 //
-// REMarkerClusterer.h
+// FMIClusterMarker
 //  MapClusterFMI
 //
 //  Created by Pavlina Gatova on 01/18/14.
@@ -12,7 +12,7 @@
 #import <float.h>
 #import "FMIMarker.h"
 #import "FMIGeographicBounds.h"
-#import "FMICluster.h"
+#import "FMIClusterObject.h"
 
 @protocol FMIClusterMarker <MKMapViewDelegate>
 

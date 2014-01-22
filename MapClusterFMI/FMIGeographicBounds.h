@@ -1,5 +1,5 @@
 //
-// RELatLngBounds.h
+// FMIGeographicBounds
 //  MapClusterFMI
 //
 //  Created by Nikolay Kivshanov  on 01/18/14.
