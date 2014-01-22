@@ -9,7 +9,7 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "REMarkerClusterer.h"
-#import "RECluster.h"
+#import "FMICluster.h"
 
 #define mixesKey @"mixesKey"
 #define mergeatorsKey @"remainedKey"
@@ -173,8 +173,8 @@
 - (void)addToClosestCluster:(id<REMarker>)marker
 {
     CGFloat distance = 40000; // Some large number
-    RECluster *clusterToAddTo;
-    for (RECluster *cluster in _clusters) {
+    FMICluster *clusterToAddTo;
+    for (FMICluster *cluster in _clusters) {
         if ([cluster hasCenter]) {
             CGFloat d = [self distanceBetweenPoints:cluster.coordinate p2:marker.coordinate];
             if (d < distance) {
@@ -187,7 +187,7 @@
     if (clusterToAddTo && [clusterToAddTo isMarkerInClusterBounds:marker]) {
         [clusterToAddTo addMarker:marker];
     } else {
-        RECluster *cluster = [[RECluster alloc] initWithClusterer:self];
+        FMICluster *cluster = [[FMICluster alloc] initWithClusterer:self];
         [cluster addMarker:marker];
         [_clusters addObject:cluster];
     }
@@ -234,10 +234,10 @@
     
     for (NSString *mergeatorKey in [mergeators allKeys]){
         NSArray *annotations = [mixes objectForKey:mergeatorKey];
-        RECluster *endCluster = [mergeators objectForKey:mergeatorKey];
+        FMICluster *endCluster = [mergeators objectForKey:mergeatorKey];
         
         if (_animated) {
-            for (RECluster *annotation in annotations) {
+            for (FMICluster *annotation in annotations) {
                 [_mapView addAnnotation:annotation];
                 if(annotation.coordinate.latitude != endCluster.coordinate.latitude || annotation.coordinate.longitude != endCluster.coordinate.longitude) {
                     CLLocationCoordinate2D realCoordinate = annotation.coordinate;
@@ -271,8 +271,8 @@
     
     for (NSString *mergeatorKey in [mergeators allKeys]) {
         NSArray *annotations = [mixes objectForKey:mergeatorKey];
-        RECluster *endCluster = [mergeators objectForKey:mergeatorKey];
-        for (RECluster *annotation in annotations){
+        FMICluster *endCluster = [mergeators objectForKey:mergeatorKey];
+        for (FMICluster *annotation in annotations){
             if (_animated) {
                 _animating = YES;
                 __typeof (&*self) __weak weakSelf = self;
@@ -293,11 +293,11 @@
                 [_mapView removeAnnotations:annotations];
                 [_mapView addAnnotation:endCluster];
             }
-            ((RECluster *)[annotations lastObject]).title = endCluster.title;
-            ((RECluster *)[annotations lastObject]).subtitle = endCluster.subtitle;
+            ((FMICluster *)[annotations lastObject]).title = endCluster.title;
+            ((FMICluster *)[annotations lastObject]).subtitle = endCluster.subtitle;
             MKAnnotationView *view = [_mapView viewForAnnotation:(_animated)?[annotations lastObject]:endCluster];
             [[view superview] bringSubviewToFront:view];
-            if (_animated) ((RECluster *)[annotations lastObject]).markers = endCluster.markers;
+            if (_animated) ((FMICluster *)[annotations lastObject]).markers = endCluster.markers;
             if ([self.delegate respondsToSelector:@selector(markerClusterer:withMapView:updateViewOfAnnotation:withView:)]) {
                 [self.delegate markerClusterer:self withMapView:_mapView updateViewOfAnnotation:annotation withView:[_mapView viewForAnnotation:annotation]];
             }
@@ -317,12 +317,12 @@
     NSMutableDictionary *mixDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
     NSMutableArray *remainingAnnotations = [NSMutableArray arrayWithCapacity:0];
     
-    for (RECluster *cluster in ((self.markerAnnotations.count > _clusters.count) ? self.markerAnnotations : _clusters)) {
+    for (FMICluster *cluster in ((self.markerAnnotations.count > _clusters.count) ? self.markerAnnotations : _clusters)) {
         if ([cluster isKindOfClass:[MKUserLocation class]])
             continue;
         NSInteger numberOfMarkers = 1;
         NSMutableArray *posiblesArrays = [NSMutableArray arrayWithCapacity:0];
-        for (RECluster *cluster2 in ((self.markerAnnotations.count <= _clusters.count)?self.markerAnnotations:_clusters)) {
+        for (FMICluster *cluster2 in ((self.markerAnnotations.count <= _clusters.count)?self.markerAnnotations:_clusters)) {
             if ([cluster2 isKindOfClass:[MKUserLocation class]])
                 continue;
             NSInteger markers = [cluster markersInClusterFromMarkers:cluster2.markers];
@@ -333,25 +333,25 @@
         }
         
         if (posiblesArrays.count == 1) {
-            [self addObject:cluster toDictionary:mixDictionary withKey:((RECluster *)[posiblesArrays lastObject]).coordinateTag];
+            [self addObject:cluster toDictionary:mixDictionary withKey:((FMICluster *)[posiblesArrays lastObject]).coordinateTag];
         } else if(posiblesArrays.count == 0) {
             [remainingAnnotations addObject:cluster];
         } else {
             NSInteger minor = INT16_MAX;
             NSInteger index = posiblesArrays.count-1;
-            for (RECluster *cluster in posiblesArrays) {
+            for (FMICluster *cluster in posiblesArrays) {
                 if (cluster.markers.count < minor) {
                     index = [posiblesArrays indexOfObject:cluster];
                     minor = cluster.markers.count;
                 }
             }
-            [self addObject:cluster toDictionary:mixDictionary withKey:((RECluster *)[posiblesArrays objectAtIndex:index]).coordinateTag];
+            [self addObject:cluster toDictionary:mixDictionary withKey:((FMICluster *)[posiblesArrays objectAtIndex:index]).coordinateTag];
         }
     }
     
     NSMutableDictionary *mergeators = [NSMutableDictionary dictionaryWithCapacity:0];
     
-    for (RECluster *cluster in ((self.markerAnnotations.count <= _clusters.count) ? self.markerAnnotations : _clusters)) {
+    for (FMICluster *cluster in ((self.markerAnnotations.count <= _clusters.count) ? self.markerAnnotations : _clusters)) {
         if ([cluster isKindOfClass:[MKUserLocation class]])
             continue;
         [mergeators setObject:cluster forKey:cluster.coordinateTag];

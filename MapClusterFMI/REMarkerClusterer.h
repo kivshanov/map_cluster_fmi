@@ -12,7 +12,7 @@
 #import <float.h>
 #import "REMarker.h"
 #import "RELatLngBounds.h"
-#import "RECluster.h"
+#import "FMICluster.h"
 
 @protocol REMarkerClusterDelegate <MKMapViewDelegate>
 

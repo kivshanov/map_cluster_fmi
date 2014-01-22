@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 FMI Project. All rights reserved.
 //
 
-#import "RECluster.h"
+#import "FMICluster.h"
 #import "REMarkerClusterer.h"
 
-@interface RECluster ()
+@interface FMICluster ()
 
 @property (strong, readwrite, nonatomic) NSString *coordinateTag;
 
 @end
 
-@implementation RECluster
+@implementation FMICluster
 
 - (id)initWithClusterer:(REMarkerClusterer *)clusterer
 {

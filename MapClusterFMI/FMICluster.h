@@ -13,7 +13,7 @@
 @class REMarkerClusterer;
 @protocol REMarker;
 
-@interface RECluster : NSObject <MKAnnotation>
+@interface FMICluster : NSObject <MKAnnotation>
 
 @property (strong, readwrite, nonatomic) RELatLngBounds *bounds;
 @property (weak, readwrite, nonatomic) REMarkerClusterer *markerClusterer;
