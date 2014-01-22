@@ -46,8 +46,4 @@
 - (void)zoomToAnnotationsBounds:(NSArray *)annotations;
 - (void)clusterize:(BOOL)animated;
 
-// Deprecated methods
-//
-- (void)clusterize __attribute__ ((deprecated)); // Use - (void)clusterize:(BOOL)animated;
-
 @end

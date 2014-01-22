@@ -108,8 +108,6 @@
     if (region.span.longitudeDelta < 0.059863)
         region.span.longitudeDelta = 0.059863;
     
-    // MKMapView BUG: this snaps to the nearest whole zoom level, which is wrong- it doesn't respect the exact region you asked for. See http://stackoverflow.com/questions/1383296/why-mkmapview-region-is-different-than-requested
-    //
     if ((region.center.latitude >= -90) && (region.center.latitude <= 90) && (region.center.longitude >= -180) && (region.center.longitude <= 180)) {
         [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
     }
@@ -195,10 +193,8 @@
         maxLongitude = fmax(annotationLong, maxLongitude);
     }
     
-    // See function below
     [self setMapRegionForMinLat:minLatitude minLong:minLongitude maxLat:maxLatitude maxLong:maxLongitude];
     
-    // If your markers were 40 in height and 20 in width, this would zoom the map to fit them perfectly. Note that there is a bug in mkmapview's set region which means it will snap the map to the nearest whole zoom level, so you will rarely get a perfect fit. But this will ensure a minimum padding.
     UIEdgeInsets mapPadding = UIEdgeInsetsMake(40.0, 10.0, 40.0, 10.0);
     CLLocationCoordinate2D relativeFromCoord = [self.mapView convertPoint:CGPointMake(0, 0) toCoordinateFromView:self.mapView];
     
@@ -331,9 +327,7 @@
         //[self addAnnotationsWithOutSpliting:remainingAnnotations];
     } else if(self.markerAnnotations.count < _clusters.count) {
         [self splitAnnotationsWithDictionary:dic];
-    } else {
     }
-
 }
 
 - (CGPoint)findClosestAnnotationX:(CGFloat)x y:(CGFloat)y
@@ -419,12 +413,6 @@
 #pragma mark -
 #pragma mark MKMapViewDelegate
 
-- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
-{
-    if ([_delegate respondsToSelector:@selector(mapView:regionWillChangeAnimated:)])
-        [_delegate mapView:mapView regionWillChangeAnimated:animated];
-}
-
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     [self clusterize:YES];
@@ -432,24 +420,6 @@
     
     if ([_delegate respondsToSelector:@selector(mapView:regionDidChangeAnimated:)])
         [_delegate mapView:mapView regionDidChangeAnimated:animated];
-}
-
-- (void)mapViewWillStartLoadingMap:(MKMapView *)mapView
-{
-    if ([_delegate respondsToSelector:@selector(mapViewWillStartLoadingMap:)])
-        [_delegate mapViewWillStartLoadingMap:mapView];
-}
-
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView
-{
-    if ([_delegate respondsToSelector:@selector(mapViewDidFinishLoadingMap:)])
-        [_delegate mapViewDidFinishLoadingMap:mapView];
-}
-
-- (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error
-{
-    if ([_delegate respondsToSelector:@selector(mapViewDidFailLoadingMap:withError:)])
-        [_delegate mapViewDidFailLoadingMap:mapView withError:error];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation

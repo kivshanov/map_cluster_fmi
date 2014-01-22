@@ -30,7 +30,7 @@
 }
 
 - (BOOL)addMarker:(id<FMIMarker>)marker
-{
+{ 
     if ([self isMarkerAlreadyAdded:marker])
         return NO;
     
@@ -68,7 +68,7 @@
     _coordinate = coordinate;
 
     // To support dragging of individual (non-cluster) pins, we pass the new
-    // coordinate through to the underlying REMarker.
+    // coordinate through to the underlying FMIMarker.
     //
     if (self.markers.count == 1) {
         FMIMarker *marker = self.markers.lastObject;
@@ -132,14 +132,6 @@
             return YES;
     }
     return NO;
-}
-
-- (void)printDescription
-{
-    NSLog(@"---- CLUSTER: %@ - %lu ----", self.coordinateTag, (unsigned long)self.markers.count);
-    for (id<FMIMarker>marker in self.markers) {
-        NSLog(@"  MARKER: %@-%@", marker.title, marker.subtitle);
-    }
 }
 
 @end

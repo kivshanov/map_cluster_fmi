@@ -31,6 +31,5 @@
 - (BOOL)addMarker:(id<FMIMarker>)marker;
 - (BOOL)isMarkerInClusterBounds:(id<FMIMarker>)marker;
 - (void)setAverageCenter;
-- (void)printDescription;
 
 @end
