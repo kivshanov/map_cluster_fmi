@@ -113,7 +113,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="addButtonTouchUpInside:" destination="lRN-93-0VB" eventType="touchUpInside" id="ERj-O8-Fe9"/>
+                                                    <action selector="addButton:" destination="lRN-93-0VB" eventType="touchUpInside" id="1Lv-gz-JHM"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CK2-UU-H9j">
@@ -133,7 +133,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="buttonGroupByTagTouchUpInside:" destination="lRN-93-0VB" eventType="touchUpInside" id="Gzg-ys-IXj"/>
+                                                    <action selector="buttonGroup:" destination="lRN-93-0VB" eventType="touchUpInside" id="jjV-ey-fHA"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3rn-XA-gd6">
@@ -153,7 +153,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="removeButtonTouchUpInside:" destination="lRN-93-0VB" eventType="touchUpInside" id="ZFG-ox-bn6"/>
+                                                    <action selector="removeButton:" destination="lRN-93-0VB" eventType="touchUpInside" id="XB4-WV-iN6"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kD3-P6-K7d">

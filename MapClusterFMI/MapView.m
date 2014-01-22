@@ -41,23 +41,23 @@
 {
     _allAnnotations = [[NSMutableSet alloc] init];
     _annotationsToIgnore = [[NSMutableSet alloc] init];
-    _clusteringMethod = ClusteringBubbleMethod;
+    _clusterMethodType = ClusteringBubbleMethod;
     _clusterSize = 0.2;
-    _minLongitudeDeltaToCluster = 0.0;
-    _minimumAnnotationCountPerCluster = 0;
-    _clusteringEnabled = YES;
-    _clusterByGroupTag = NO;
+    _minDelta = 0.0;
+    _minAnnotationsInCluster = 0;
+    _enableClustering = YES;
+    _makeGroups = NO;
     _clusterInvisibleViews = NO;
     _neeedsClustering = YES;
     
     // define relevant properties (those, which will affect the clustering)
     self.reclusterOnChangeProperties = @[@"annotationsToIgnore",
-                                         @"clusteringEnabled",
-                                         @"clusteringMethod",
+                                         @"enableClustering",
+                                         @"clusterMethodType",
                                          @"clusterSize",
                                          @"clusterByGroupTag",
-                                         @"minLongitudeDeltaToCluster",
-                                         @"minimumAnnotationCountPerCluster",
+                                         @"minDelta",
+                                         @"minAnnotationsInCluster",
                                          @"clusterInvisibleViews",
                                          @"annotationsToIgnore"];
     
@@ -81,21 +81,21 @@
 {
     [_allAnnotations addObject:annotation];
     self.neeedsClustering = YES;
-    [self doClustering];
+    [self divideElementsIntoClusters];
 }
 
 - (void)addAnnotations:(NSArray *)annotations
 {
     [_allAnnotations addObjectsFromArray:annotations];
     self.neeedsClustering = YES;
-    [self doClustering];
+    [self divideElementsIntoClusters];
 }
 
 - (void)removeAnnotation:(id < MKAnnotation >)annotation
 {
     [_allAnnotations removeObject:annotation];
     self.neeedsClustering = YES;
-    [self doClustering];
+    [self divideElementsIntoClusters];
 }
 
 - (void)removeAnnotations:(NSArray *)annotations
@@ -104,7 +104,7 @@
         [_allAnnotations removeObject:annotation];
     }
     self.neeedsClustering = YES;
-    [self doClustering];
+    [self divideElementsIntoClusters];
 }
 
 - (NSArray *)annotations
@@ -130,7 +130,7 @@
 
 #pragma mark - Clustering
 
-- (void)doClustering
+- (void)divideElementsIntoClusters
 {
     // only recluster if, annotations did change, map was zoomed or,
     // map was panned significantly
@@ -154,20 +154,16 @@
     
     // Cluster annotations, when enabled and map is above the minimum zoom
     NSArray *clusteredAnnotations;
-    if (_clusteringEnabled && (self.region.span.longitudeDelta > _minLongitudeDeltaToCluster))
+    if (_enableClustering && (self.region.span.longitudeDelta > _minDelta))
     {
         //calculate cluster radius
         CLLocationDistance clusterRadius = self.region.span.longitudeDelta * _clusterSize;
         
         // clustering
-        if (self.clusteringMethod == ClusteringBubbleMethod) {
-            clusteredAnnotations = [Algorithms bubbleClusteringWithAnnotations:annotationsToCluster
-                                                                   clusterRadius:clusterRadius
-                                                                         grouped:self.clusterByGroupTag];
+        if (self.clusterMethodType == ClusteringBubbleMethod) {
+            clusteredAnnotations = [Algorithms bubbleMthodWithAnnotations:annotationsToCluster radius:clusterRadius grouped:self.makeGroups];
         } else {
-            clusteredAnnotations =[Algorithms gridClusteringWithAnnotations:annotationsToCluster
-                                                                  clusterRect:MKCoordinateSpanMake(clusterRadius, clusterRadius)
-                                                                      grouped:self.clusterByGroupTag];
+            clusteredAnnotations = [Algorithms gridMethodWithAnnotations:annotationsToCluster rect:MKCoordinateSpanMake(clusterRadius, clusterRadius) grouped:self.makeGroups];
         }
     }
     // pass through without when not
@@ -182,7 +178,7 @@
     for (NSInteger i=0; i<annotationsToDisplay.count; i++) {
         PinAnnotation *ocAnnotation = annotationsToDisplay[i];
         if ([ocAnnotation isKindOfClass:[PinAnnotation class]] &&
-            ocAnnotation.annotationsInCluster.count < self.minimumAnnotationCountPerCluster) {
+            ocAnnotation.annotationsInCluster.count < self.minAnnotationsInCluster) {
             [annotationsToDisplay removeObject:ocAnnotation];
             [annotationsToDisplay addObjectsFromArray:ocAnnotation.annotationsInCluster];
             i--; // we removed one object, go back one (otherwise some will be skipped)
@@ -242,7 +238,7 @@
     
     for (id<MKAnnotation> annotation in annotationsToFilter) {
         // if annotation is not inside the coordinates, kick it
-        if ((CLLocationCoordinateDistance([annotation coordinate], self.centerCoordinate) <= radius)) {
+        if ((LocationDistance([annotation coordinate], self.centerCoordinate) <= radius)) {
             [filteredAnnotations addObject:annotation];
         }
     }

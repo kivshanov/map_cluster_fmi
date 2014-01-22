@@ -11,6 +11,6 @@
 
 @interface Distance : NSObject
 
-double CLLocationCoordinateDistance(CLLocationCoordinate2D c1, CLLocationCoordinate2D c2);
+double LocationDistance(CLLocationCoordinate2D c1, CLLocationCoordinate2D c2);
 
 @end

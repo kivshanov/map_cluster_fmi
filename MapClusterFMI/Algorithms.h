@@ -12,16 +12,15 @@
 typedef enum {
     ClusteringBubbleMethod,
     ClusteringGridMethod
-} ClusteringMethod;
+} ClusterMethodType;
 
 @interface Algorithms : NSObject
 
-+ (NSArray*)bubbleClusteringWithAnnotations:(NSArray*)annotationsToCluster
-                              clusterRadius:(CLLocationDistance)radius
-                                    grouped:(BOOL)grouped;
-
-+ (NSArray*)gridClusteringWithAnnotations:(NSArray*)annotationsToCluster
-                              clusterRect:(MKCoordinateSpan)tileRect
-                                  grouped:(BOOL)grouped;
++ (NSArray *)bubbleMthodWithAnnotations:(NSArray*)annotations
+                                 radius:(CLLocationDistance)radius
+                                grouped:(BOOL)grouped;
++ (NSArray *)gridMethodWithAnnotations:(NSArray*)annotations
+                                  rect:(MKCoordinateSpan)tileRect
+                               grouped:(BOOL)grouped;
 
 @end

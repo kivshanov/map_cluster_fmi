@@ -13,20 +13,18 @@
 
 @implementation Algorithms
 
-+ (NSArray*)bubbleClusteringWithAnnotations:(NSArray*)annotationsToCluster
-                              clusterRadius:(CLLocationDistance)radius
-                                    grouped:(BOOL)grouped;
++ (NSArray *)bubbleMthodWithAnnotations:(NSArray*)annotations radius:(CLLocationDistance)radius grouped:(BOOL)grouped
 {
     NSMutableArray *clusteredAnnotations = [[NSMutableArray alloc] init];
     
 	// Clustering
-	for (id <MKAnnotation> annotation in annotationsToCluster)
+	for (id <MKAnnotation> annotation in annotations)
     {
 		// Find fitting existing cluster
 		BOOL foundCluster = NO;
         for (PinAnnotation *clusterAnnotation in clusteredAnnotations) {
             // If the annotation is in range of the cluster, add it
-            if ((CLLocationCoordinateDistance([annotation coordinate], [clusterAnnotation coordinate]) <= radius)) {
+            if ((LocationDistance([annotation coordinate], [clusterAnnotation coordinate]) <= radius)) {
                 // check group
                 if (grouped && [annotation conformsToProtocol:@protocol(GroupProtocol)]) {
                     if (![clusterAnnotation.groupTag isEqualToString:((id <GroupProtocol>)annotation).groupTag])
@@ -64,14 +62,12 @@
     return returnArray;
 }
 
-+ (NSArray*)gridClusteringWithAnnotations:(NSArray*)annotationsToCluster
-                              clusterRect:(MKCoordinateSpan)tileRect
-                                  grouped:(BOOL)grouped;
++ (NSArray *)gridMethodWithAnnotations:(NSArray*)annotations rect:(MKCoordinateSpan)tileRect grouped:(BOOL)grouped
 {
     NSMutableDictionary *clusteredAnnotations = [[NSMutableDictionary alloc] init];
     
     // iterate through all annotations
-	for (id<MKAnnotation> annotation in annotationsToCluster)
+	for (id<MKAnnotation> annotation in annotations)
     {
         // calculate grid coordinates of the annotation
         NSInteger row = ([annotation coordinate].longitude+180.0)/tileRect.longitudeDelta;

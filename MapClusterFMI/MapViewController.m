@@ -175,7 +175,7 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
         annotationView.image = [UIImage imageNamed:@"regular.png"];
         
         // change pin image for group
-        if (self.mapView.clusterByGroupTag) {
+        if (self.mapView.makeGroups) {
             annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@s.png", clusterAnnotation.groupTag]];
             clusterAnnotation.title = [NSString stringWithFormat:@"%@s", clusterAnnotation.groupTag];
         }
@@ -226,7 +226,7 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
 - (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated
 {
     [self.mapView removeOverlays:self.mapView.overlays];
-    [self.mapView doClustering];
+    [self.mapView divideElementsIntoClusters];
 }
 
 
@@ -234,11 +234,11 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
 // ==============================
 #pragma mark - UI actions
 
-- (IBAction)addButtonTouchUpInside:(id)sender
+- (IBAction)addButton:(id)sender
 {
     shownItems +=20;
     [self.mapView removeOverlays:self.mapView.overlays];
-    NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomCoordinatesGenerator:shownItems]];
+    NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomMapObjectsFromDB:shownItems]];
     NSMutableSet *annotationsToAdd = [[NSMutableSet alloc] init];
     
     for (CLLocation *loc in randomLocations) {
@@ -257,42 +257,42 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
 - (IBAction)changeClusterMethodButtonTouchUpInside:(UIButton *)sender
 {
     [self.mapView removeOverlays:self.mapView.overlays];
-    if (self.mapView.clusteringMethod == ClusteringBubbleMethod) {
+    if (self.mapView.clusterMethodType == ClusteringBubbleMethod) {
         [sender setTitle:@"Bubble cluster" forState:UIControlStateNormal];
-        self.mapView.clusteringMethod = ClusteringGridMethod;
+        self.mapView.clusterMethodType = ClusteringGridMethod;
     }
     else{
         [sender setTitle:@"Grid cluster" forState:UIControlStateNormal];
-        self.mapView.clusteringMethod = ClusteringBubbleMethod;
+        self.mapView.clusterMethodType = ClusteringBubbleMethod;
     }
-    [self.mapView doClustering];
+    [self.mapView divideElementsIntoClusters];
 }
 
 - (IBAction)clusteringButtonTouchUpInside:(UIButton *)sender
 {
     [self.mapView removeOverlays:self.mapView.overlays];
-    if (self.mapView.clusteringEnabled) {
+    if (self.mapView.enableClustering) {
         [sender setTitle:@"Turn clustering on" forState:UIControlStateNormal];
-        self.mapView.clusteringEnabled = NO;
+        self.mapView.enableClustering = NO;
     }
     else{
         [sender setTitle:@"Turn clustering off" forState:UIControlStateNormal];
-        self.mapView.clusteringEnabled = YES;
+        self.mapView.enableClustering = YES;
     }
-    [self.mapView doClustering];
+    [self.mapView divideElementsIntoClusters];
 }
 
-- (IBAction)removeButtonTouchUpInside:(id)sender
+- (IBAction)removeButton:(id)sender
 {
     [self.mapView removeAnnotations:self.mapView.annotations];
     [self.mapView removeOverlays:self.mapView.overlays];
     self.numberOfAnnotations.text = @"0";
 }
 
-- (IBAction)buttonGroupByTagTouchUpInside:(UIButton *)sender
+- (IBAction)buttonGroup:(UIButton *)sender
 {
-    self.mapView.clusterByGroupTag = ! self.mapView.clusterByGroupTag;
-    if(self.mapView.clusterByGroupTag){
+    self.mapView.makeGroups = ! self.mapView.makeGroups;
+    if(self.mapView.makeGroups){
         [sender setTitle:@"Turn groups off" forState:UIControlStateNormal];
         self.mapView.clusterSize = kDEFAULTCLUSTERSIZE * 2.0;
     }
@@ -302,7 +302,7 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
     }
     
     [self.mapView removeOverlays:self.mapView.overlays];
-    [self.mapView doClustering];
+    [self.mapView divideElementsIntoClusters];
 }
 
 - (IBAction)changeGroup:(id)sender
@@ -325,35 +325,16 @@ static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
     
 }
 
-- (NSArray *)randomCoordinatesGenerator:(NSInteger) numberOfCoordinates
+- (NSArray *)randomMapObjectsFromDB:(NSInteger)count
 {
     NSMutableArray *result = [NSMutableArray array];
-    NSArray *objects = [MapObject getObjectsForMaxIndex:numberOfCoordinates];
+    NSArray *objects = [MapObject getObjectsForMaxIndex:count];
     
     for(MapObject *object in objects) {
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         [result addObject:loc];
     }
-    
-//    MKCoordinateRegion visibleRegion = self.mapView.region;
-//    visibleRegion.span.latitudeDelta *= 0.8;
-//    visibleRegion.span.longitudeDelta *= 0.8;
-//    
-//    numberOfCoordinates = MAX(0,numberOfCoordinates);
-//    NSMutableArray *coordinates = [[NSMutableArray alloc] initWithCapacity:numberOfCoordinates];
-//    for (int i = 0; i < numberOfCoordinates; i++) {
-//        
-//        // start with top left corner
-//        CLLocationDistance longitude = visibleRegion.center.longitude - visibleRegion.span.longitudeDelta/2.0;
-//        CLLocationDistance latitude  = visibleRegion.center.latitude + visibleRegion.span.latitudeDelta/2.0;
-//        
-//        // Get random coordinates within current map rect
-//        longitude += (arc4random()%kMax)/(CGFloat)kMax * visibleRegion.span.longitudeDelta;
-//        latitude  -= (arc4random()%kMax)/(CGFloat)kMax * visibleRegion.span.latitudeDelta;
-//        
-//        CLLocation *loc = [[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
-//        [coordinates addObject:loc];
-//    }
+
     return  result;
 }
 

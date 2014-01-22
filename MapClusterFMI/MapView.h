@@ -13,17 +13,16 @@
 
 @interface MapView : MKMapView
 
-@property(nonatomic, assign) ClusteringMethod clusteringMethod;
+@property(nonatomic, assign) ClusterMethodType clusterMethodType;
 @property(nonatomic, strong) NSMutableSet *annotationsToIgnore;
 @property(nonatomic, readonly) NSArray *displayedAnnotations;
-@property(nonatomic, assign) BOOL clusteringEnabled;
+@property(nonatomic, assign) BOOL enableClustering;
 @property(nonatomic, assign) CLLocationDistance clusterSize;
-@property(nonatomic, assign) BOOL clusterByGroupTag;
-@property(nonatomic, assign) CLLocationDegrees minLongitudeDeltaToCluster;
-@property(nonatomic, assign) NSUInteger minimumAnnotationCountPerCluster;
+@property(nonatomic, assign) BOOL makeGroups;
+@property(nonatomic, assign) CLLocationDegrees minDelta;
+@property(nonatomic, assign) NSUInteger minAnnotationsInCluster;
 @property (nonatomic, assign) BOOL clusterInvisibleViews;
 
-- (void)doClustering;
-- (NSArray *)displayedAnnotations;
+- (void)divideElementsIntoClusters;
 
 @end
