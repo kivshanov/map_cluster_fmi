@@ -330,11 +330,6 @@
     }
 }
 
-- (CGPoint)findClosestAnnotationX:(CGFloat)x y:(CGFloat)y
-{
-    return [self findClosestAnnotationX:x y:y views:_tempViews];
-}
-
 
 - (void)joinAnnotationsWithDictionary:(NSDictionary *)dictionary
 {
@@ -377,27 +372,6 @@
     }
 }
 
-- (CGPoint)findClosestAnnotationX:(CGFloat)x y:(CGFloat)y views:(NSArray *)views
-{
-    CGPoint result = CGPointMake(0, 0);
-    CGFloat diff = 10000;
-    for (NSInteger i=0; i < [views count]; i++) {
-        MKAnnotationView* anView = [views objectAtIndex:i];
-        if (anView) {
-            CGPoint pos = anView.frame.origin;
-            CGFloat newDiff = sqrt((x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y));
-            if (newDiff < diff) {
-                result = pos;
-                diff = newDiff;
-            }
-        }
-    }
-    if (diff > 80)
-        return CGPointZero;
-    
-    return result;
-}
-
 - (NSArray *)markerAnnotations
 {
     NSMutableArray *annotations = [NSMutableArray array];
@@ -431,18 +405,12 @@
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;
     
-	static NSString *pinID = @"REMarkerClustererPin";
+	static NSString *pinID = @"REDefaultPin";
     
 	MKPinAnnotationView *pinView = (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:pinID];
     
 	if (pinView == nil) {
 		pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pinID];
-        
-        UIButton *detailButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        detailButton.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        detailButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        detailButton.tag = 1;
-        pinView.rightCalloutAccessoryView = detailButton;
     }
 	
 	pinView.pinColor = MKPinAnnotationColorRed;
