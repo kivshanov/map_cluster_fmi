@@ -31,7 +31,7 @@
     
     _gridSize = 25;
     _maxDelayOfSplitAnimation = 0;
-    _maxDelayOfSplitAnimation = 0.25;
+    _maxDurationOfSplitAnimation= 0.25;
     _tempViews = [[NSMutableArray alloc] init];
     _markers = [[NSMutableArray alloc] init];
     _clusters = [[NSMutableArray alloc] init];
