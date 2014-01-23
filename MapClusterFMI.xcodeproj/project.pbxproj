@@ -551,6 +551,7 @@
 				GCC_PREFIX_HEADER = "MapClusterFMI/MapClusterFMI-Prefix.pch";
 				INFOPLIST_FILE = "MapClusterFMI/MapClusterFMI-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "E1614D4B-6063-402F-8831-04CC5250BEFB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -564,6 +565,7 @@
 				GCC_PREFIX_HEADER = "MapClusterFMI/MapClusterFMI-Prefix.pch";
 				INFOPLIST_FILE = "MapClusterFMI/MapClusterFMI-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "B7279834-FEF2-4145-8318-DE07E75A5C9D";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
