@@ -88,14 +88,14 @@
     for (MapObject *object in randomLocations) {
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
-        FMIMarker *marker = [[FMIMarker alloc] init];
+        FMISingleMapObject *marker = [[FMISingleMapObject alloc] init];
         marker.coordinate = loc.coordinate;
         marker.title = [NSString stringWithFormat:@"%@", self.placeType];
         [self.clusterer addMarker:marker];
         
     }
 
-    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%lu", randomLocations.count];
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", randomLocations.count];
     
 
     // Create clusters (without animations on view load)
@@ -200,14 +200,14 @@
     for (MapObject *object in randomLocations) {
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
-        FMIMarker *marker = [[FMIMarker alloc] init];
+        FMISingleMapObject *marker = [[FMISingleMapObject alloc] init];
         marker.coordinate = loc.coordinate;
         marker.title = [NSString stringWithFormat:@"%@", self.placeType];
         [self.clusterer addMarker:marker];
         
     }
     
-    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%lu", shownItems];
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", shownItems];
     
     // Zoom to show all clusters/markers on the map
     //

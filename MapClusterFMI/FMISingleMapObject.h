@@ -1,5 +1,5 @@
 //
-// FMIMarker
+// FMISingleMapObject.h
 //  MapClusterFMI
 //
 //  Created by Nikolay Kivshanov  on 01/18/14.
@@ -8,10 +8,10 @@
 
 #import <MapKit/MapKit.h>
 
-@protocol FMIMarker <MKAnnotation>
+@protocol FMISingleMapObject <MKAnnotation>
 @end
 
-@interface FMIMarker : NSObject <FMIMarker>
+@interface FMISingleMapObject : NSObject <FMISingleMapObject>
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;

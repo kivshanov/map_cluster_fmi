@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import <float.h>
-#import "FMIMarker.h"
+#import "FMISingleMapObject.h"
 #import "FMIGeographicBounds.h"
 #import "FMIClusterObject.h"
 
@@ -39,9 +39,9 @@
 @property (assign, readonly, nonatomic) BOOL animating;
 
 - (id)initWithMapView:(MKMapView *)mapView delegate:(id <FMIClusterMarker>)delegate;
-- (void)addMarker:(id<FMIMarker>)marker;
+- (void)addMarker:(id<FMISingleMapObject>)marker;
 - (void)addMarkers:(NSArray*)markers;
-- (void)removeMarker:(id<FMIMarker>)marker;
+- (void)removeMarker:(id<FMISingleMapObject>)marker;
 - (void)removeAllMarkers;
 - (void)zoomToAnnotationsBounds:(NSArray *)annotations;
 - (void)clusterize:(BOOL)animated;

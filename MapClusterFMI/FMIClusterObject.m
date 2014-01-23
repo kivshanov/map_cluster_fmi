@@ -29,7 +29,7 @@
     return self;
 }
 
-- (BOOL)addMarker:(id<FMIMarker>)marker
+- (BOOL)addMarker:(id<FMISingleMapObject>)marker
 { 
     if ([self isMarkerAlreadyAdded:marker])
         return NO;
@@ -53,8 +53,8 @@
     [self.markers addObject:marker];
     
     if (self.markers.count == 1){
-        self.title = ((id<FMIMarker>)self.markers.lastObject).title;
-        self.subtitle = ((id<FMIMarker>)self.markers.lastObject).title;
+        self.title = ((id<FMISingleMapObject>)self.markers.lastObject).title;
+        self.subtitle = ((id<FMISingleMapObject>)self.markers.lastObject).title;
     } else{
         self.title = [NSString stringWithFormat:self.markerClusterer.clusterTitle, self.markers.count];
         self.subtitle = @"";
@@ -68,10 +68,10 @@
     _coordinate = coordinate;
 
     // To support dragging of individual (non-cluster) pins, we pass the new
-    // coordinate through to the underlying FMIMarker.
+    // coordinate through to the underlying FMISingleMapObject.
     //
     if (self.markers.count == 1) {
-        FMIMarker *marker = self.markers.lastObject;
+        FMISingleMapObject *marker = self.markers.lastObject;
         marker.coordinate = coordinate;
     }
 }
@@ -83,7 +83,7 @@
     CGFloat y = 0;
     CGFloat z = 0;
     
-    for (id<FMIMarker>marker in self.markers) {
+    for (id<FMISingleMapObject>marker in self.markers) {
         CGFloat lat = marker.coordinate.latitude * M_PI /  180;
         CGFloat lon = marker.coordinate.longitude * M_PI / 180;
         
@@ -110,7 +110,7 @@
     [self.bounds setExtendedBounds:self.markerClusterer.gridSize];
 }
 
-- (BOOL)isMarkerInClusterBounds:(id<FMIMarker>)marker
+- (BOOL)isMarkerInClusterBounds:(id<FMISingleMapObject>)marker
 {
     return [self.bounds contains:marker.coordinate];
 }
@@ -118,16 +118,16 @@
 - (NSInteger)markersInClusterFromMarkers:(NSArray *) markers
 {
     NSInteger result = 0;
-    for (id<FMIMarker>marker in markers) {
+    for (id<FMISingleMapObject>marker in markers) {
         if ([self isMarkerAlreadyAdded:marker])
             result++;
     }
     return result;
 }
 
-- (BOOL)isMarkerAlreadyAdded:(id<FMIMarker>)marker
+- (BOOL)isMarkerAlreadyAdded:(id<FMISingleMapObject>)marker
 {
-    for (id<FMIMarker>m in self.markers) {
+    for (id<FMISingleMapObject>m in self.markers) {
         if ([m isEqual:marker])
             return YES;
     }

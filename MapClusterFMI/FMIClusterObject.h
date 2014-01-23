@@ -11,7 +11,7 @@
 #import "FMIGeographicBounds.h"
 
 @class FMIClusterManager;
-@protocol FMIMarker;
+@protocol FMISingleMapObject;
 
 @interface FMIClusterObject : NSObject <MKAnnotation>
 
@@ -26,10 +26,10 @@
 @property (strong, readonly, nonatomic) NSString *coordinateTag;
 
 - (id)initWithClusterer:(FMIClusterManager *)clusterer;
-- (BOOL)isMarkerAlreadyAdded:(id<FMIMarker>)marker;
+- (BOOL)isMarkerAlreadyAdded:(id<FMISingleMapObject>)marker;
 - (NSInteger)markersInClusterFromMarkers:(NSArray *)markers;
-- (BOOL)addMarker:(id<FMIMarker>)marker;
-- (BOOL)isMarkerInClusterBounds:(id<FMIMarker>)marker;
+- (BOOL)addMarker:(id<FMISingleMapObject>)marker;
+- (BOOL)isMarkerInClusterBounds:(id<FMISingleMapObject>)marker;
 - (void)setAverageCenter;
 
 @end
