@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "CoreDataManager.h"
+#import "MapObject.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -15,6 +16,7 @@
     // Override point for customization after application launch.
     //test
     [CoreDataManager instance];
+    [MapObject insertCoordinatesinDB];
     return YES;
 }
 							

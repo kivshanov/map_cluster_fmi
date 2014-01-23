@@ -10,8 +10,11 @@
 #import "SingleAnnotation.h"
 #import "Algorithms.h"
 #import "PinAnnotation.h"
+#import "MapObject.h"
 
-@interface MapViewController ()
+@interface MapViewController () {
+    NSInteger shownItems;
+}
 @property BOOL isMenuOpen;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAnnotations;
 @property (strong, nonatomic) NSString *placeType;
@@ -38,9 +41,19 @@ static int kMax = 2147483647;
     // Dispose of any resources that can be recreated.
 }
 
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    if(shownItems < 1) {
+        MKCoordinateRegion mapRegion;
+        mapRegion.center = mapView.userLocation.coordinate;
+        [mapView setRegion:mapRegion animated: YES];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    shownItems = 0;
     self.mapView.delegate = self;
     self.isMenuOpen = YES;
     self.mapView.clusterSize = kDEFAULTCLUSTERSIZE;
@@ -157,7 +170,7 @@ static int kMax = 2147483647;
         
         // set title
         clusterAnnotation.title = @"Cluster";
-        clusterAnnotation.subtitle = [NSString stringWithFormat:@"Containing annotations: %d", [clusterAnnotation.annotationsInCluster count]];
+        clusterAnnotation.subtitle = [NSString stringWithFormat:@"Containing annotations: %d", (int)[clusterAnnotation.annotationsInCluster count]];
         
         // set its image
         annotationView.image = [UIImage imageNamed:@"regular.png"];
@@ -224,8 +237,9 @@ static int kMax = 2147483647;
 
 - (IBAction)addButtonTouchUpInside:(id)sender
 {
+    shownItems +=20;
     [self.mapView removeOverlays:self.mapView.overlays];
-    NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomCoordinatesGenerator:100]];
+    NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomCoordinatesGenerator:shownItems]];
     NSMutableSet *annotationsToAdd = [[NSMutableSet alloc] init];
     
     for (CLLocation *loc in randomLocations) {
@@ -238,7 +252,7 @@ static int kMax = 2147483647;
     }
     
     [self.mapView addAnnotations:[annotationsToAdd allObjects]];
-    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", [self.mapView.annotations count]];
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", (int)[self.mapView.annotations count]];
 }
 
 - (IBAction)changeClusterMethodButtonTouchUpInside:(UIButton *)sender
@@ -312,28 +326,36 @@ static int kMax = 2147483647;
     
 }
 
-- (NSArray *)randomCoordinatesGenerator:(int) numberOfCoordinates
+- (NSArray *)randomCoordinatesGenerator:(NSInteger) numberOfCoordinates
 {
-    MKCoordinateRegion visibleRegion = self.mapView.region;
-    visibleRegion.span.latitudeDelta *= 0.8;
-    visibleRegion.span.longitudeDelta *= 0.8;
+    NSMutableArray *result = [NSMutableArray array];
+    NSArray *objects = [MapObject getObjectsForMaxIndex:numberOfCoordinates];
     
-    numberOfCoordinates = MAX(0,numberOfCoordinates);
-    NSMutableArray *coordinates = [[NSMutableArray alloc] initWithCapacity:numberOfCoordinates];
-    for (int i = 0; i < numberOfCoordinates; i++) {
-        
-        // start with top left corner
-        CLLocationDistance longitude = visibleRegion.center.longitude - visibleRegion.span.longitudeDelta/2.0;
-        CLLocationDistance latitude  = visibleRegion.center.latitude + visibleRegion.span.latitudeDelta/2.0;
-        
-        // Get random coordinates within current map rect
-        longitude += (arc4random()%kMax)/(CGFloat)kMax * visibleRegion.span.longitudeDelta;
-        latitude  -= (arc4random()%kMax)/(CGFloat)kMax * visibleRegion.span.latitudeDelta;
-        
-        CLLocation *loc = [[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
-        [coordinates addObject:loc];
+    for(MapObject *object in objects) {
+        CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
+        [result addObject:loc];
     }
-    return  coordinates;
+    
+//    MKCoordinateRegion visibleRegion = self.mapView.region;
+//    visibleRegion.span.latitudeDelta *= 0.8;
+//    visibleRegion.span.longitudeDelta *= 0.8;
+//    
+//    numberOfCoordinates = MAX(0,numberOfCoordinates);
+//    NSMutableArray *coordinates = [[NSMutableArray alloc] initWithCapacity:numberOfCoordinates];
+//    for (int i = 0; i < numberOfCoordinates; i++) {
+//        
+//        // start with top left corner
+//        CLLocationDistance longitude = visibleRegion.center.longitude - visibleRegion.span.longitudeDelta/2.0;
+//        CLLocationDistance latitude  = visibleRegion.center.latitude + visibleRegion.span.latitudeDelta/2.0;
+//        
+//        // Get random coordinates within current map rect
+//        longitude += (arc4random()%kMax)/(CGFloat)kMax * visibleRegion.span.longitudeDelta;
+//        latitude  -= (arc4random()%kMax)/(CGFloat)kMax * visibleRegion.span.latitudeDelta;
+//        
+//        CLLocation *loc = [[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
+//        [coordinates addObject:loc];
+//    }
+    return  result;
 }
 
 @end
