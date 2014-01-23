@@ -24,7 +24,7 @@
         self.averageCenter = [clusterer isAverageCenter];
         self.markers = [[NSMutableArray alloc] init];
         self.hasCenter = NO;
-        self.bounds = [[FMIGeographicBounds alloc] initManagerWithMapView:self.markerClusterer.mapView];
+        self.bounds = [[FMIGeographicBounds alloc] initWithMapView:self.markerClusterer.mapView];
     }
     return self;
 }
@@ -106,7 +106,7 @@
 
 - (void)calculateBounds
 {
-    [self.bounds setBottomLeft:self.coordinate upRight:self.coordinate];
+    [self.bounds setSouthWest:self.coordinate northEast:self.coordinate];
     [self.bounds setExtendedBounds:self.markerClusterer.gridSize];
 }
 

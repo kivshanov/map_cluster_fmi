@@ -11,14 +11,14 @@
 
 @interface FMIGeographicBounds : NSObject
 
-@property (nonatomic, assign) CLLocationCoordinate2D topRight;
-@property (nonatomic, assign) CLLocationCoordinate2D topLeft;
-@property (nonatomic, assign) CLLocationCoordinate2D bottomLeft;
-@property (nonatomic, assign) CLLocationCoordinate2D bottomRight;
-@property (nonatomic, weak) MKMapView *mapView;
+@property (assign, readwrite, nonatomic) CLLocationCoordinate2D northEast;
+@property (assign, readwrite, nonatomic) CLLocationCoordinate2D northWest;
+@property (assign, readwrite, nonatomic) CLLocationCoordinate2D southWest;
+@property (assign, readwrite, nonatomic) CLLocationCoordinate2D southEast;
+@property (weak, readwrite, nonatomic) MKMapView *mapView;
 
-- (id)initManagerWithMapView:(MKMapView *)mapView;
-- (void)setBottomLeft:(CLLocationCoordinate2D)bl upRight:(CLLocationCoordinate2D)tr;
+- (id)initWithMapView:(MKMapView *)mapView;
+- (void)setSouthWest:(CLLocationCoordinate2D)sw northEast:(CLLocationCoordinate2D)ne;
 - (void)setExtendedBounds:(NSInteger)gridSize;
 - (bool)contains:(CLLocationCoordinate2D)coordinate;
 
