@@ -95,7 +95,7 @@
         
     }
 
-    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", randomLocations.count];
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", (int)randomLocations.count];
     
 
     // Create clusters (without animations on view load)
@@ -207,7 +207,7 @@
         
     }
     
-    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d", shownItems];
+    self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d",(int) shownItems];
     
     // Zoom to show all clusters/markers on the map
     //

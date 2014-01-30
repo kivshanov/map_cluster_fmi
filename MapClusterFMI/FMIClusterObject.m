@@ -1,5 +1,5 @@
 //
-//  FMICluster
+//  FMIClusterObject.m
 //  MapClusterFMI
 //
 //  Created by Pavlina Gatova on 01/18/14.
@@ -67,42 +67,11 @@
 {
     _coordinate = coordinate;
 
-    // To support dragging of individual (non-cluster) pins, we pass the new
-    // coordinate through to the underlying FMISingleMapObject.
-    //
     if (self.markers.count == 1) {
         FMISingleMapObject *marker = self.markers.lastObject;
         marker.coordinate = coordinate;
     }
 }
-
-
-- (void)setAverageCenter
-{
-    CGFloat x = 0;
-    CGFloat y = 0;
-    CGFloat z = 0;
-    
-    for (id<FMISingleMapObject>marker in self.markers) {
-        CGFloat lat = marker.coordinate.latitude * M_PI /  180;
-        CGFloat lon = marker.coordinate.longitude * M_PI / 180;
-        
-        x += cos(lat) * cos(lon);
-        y += cos(lat) * sin(lon);
-        z += sin(lat);
-    }
-    
-    x = x / self.markers.count;
-    y = y / self.markers.count;
-    z = z / self.markers.count;
-    
-    CGFloat r = sqrt(x * x + y * y + z * z);
-    CGFloat lat1 = asin(z / r) / (M_PI / 180);
-    CGFloat lon1 = atan2(y, x) / (M_PI / 180);
-    
-    self.coordinate = CLLocationCoordinate2DMake(lat1, lon1);
-}
-
 
 - (void)calculateBounds
 {

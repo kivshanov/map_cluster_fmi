@@ -1,5 +1,5 @@
 //
-//  FMICluster
+//  FMIClusterObject.h
 //  MapClusterFMI
 //
 //  Created by Pavlina Gatova on 01/18/14.
@@ -30,6 +30,5 @@
 - (NSInteger)markersInClusterFromMarkers:(NSArray *)markers;
 - (BOOL)addMarker:(id<FMISingleMapObject>)marker;
 - (BOOL)isMarkerInClusterBounds:(id<FMISingleMapObject>)marker;
-- (void)setAverageCenter;
 
 @end
