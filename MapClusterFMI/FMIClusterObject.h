@@ -22,6 +22,7 @@
 @property (assign, nonatomic) BOOL hasCenter;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *subtitle;
+@property (nonatomic, copy) NSNumber *type;
 @property (strong, nonatomic) NSMutableArray *markers;
 @property (strong, readonly, nonatomic) NSString *coordinateTag;
 

@@ -47,6 +47,9 @@ static inline NSInteger random_between(NSInteger min, NSInteger max) {
             object.latitude = @(42.0f + (float)random_between(5000, 7500)/10000);
             object.longtitude = @(23.0f + (float)random_between(1600, 5000)/10000);
             object.index = @(i+1);
+            
+            // TODO: change it
+            object.type = @(i%3);
         }
         
         [[CoreDataManager instance] saveContext];

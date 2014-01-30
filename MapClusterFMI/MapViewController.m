@@ -14,15 +14,11 @@
 }
 @property BOOL isMenuOpen;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAnnotations;
-@property (strong, nonatomic) NSString *placeType;
+//@property (strong, nonatomic) NSString *placeType;
 @property (strong, nonatomic) NSArray *allTypes;
-
-//@property (strong, readwrite, nonatomic) MKMapView *mapView;
 @property (strong, readwrite, nonatomic) FMIClusterManager *clusterer;
 
 @end
-
-//static CGFloat kDEFAULTCLUSTERSIZE = 0.2;
 
 @implementation MapViewController
 
@@ -58,7 +54,7 @@
     self.isMenuOpen = YES;
     self.numberOfAnnotations.text = @"0";
     self.allTypes = [NSArray arrayWithObjects:@"Park", @"Restaurant", @"Cafe", nil];
-    self.placeType = [self.allTypes objectAtIndex:self.selectedType];
+//    self.placeType = [self.allTypes objectAtIndex:self.selectedType];
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         for (UIButton *button in self.view.subviews) {
@@ -90,7 +86,13 @@
         
         FMISingleMapObject *marker = [[FMISingleMapObject alloc] init];
         marker.coordinate = loc.coordinate;
-        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
+        
+        // TODO - uncomment
+        marker.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
+//        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
+        
+        marker.type = [NSNumber numberWithInt:[object.type intValue]];
+        
         [self.clusterer addMarker:marker];
         
     }
@@ -182,7 +184,9 @@
         pinView.canShowCallout = YES;
     }
     
-    pinView.image = [UIImage imageNamed:annotation.markers.count == 1 ? [NSString stringWithFormat:@"%@.png", self.placeType] : [NSString stringWithFormat:@"%@s.png", self.placeType]];
+    // TODO - uncomment next line
+    pinView.image = [UIImage imageNamed:annotation.markers.count == 1 ? [NSString stringWithFormat:@"%@.png", [self.allTypes objectAtIndex:[annotation.type intValue]]] : [NSString stringWithFormat:@"%@s.png", [self.allTypes objectAtIndex:[annotation.type intValue]]]];
+//    pinView.image = [UIImage imageNamed:annotation.markers.count == 1 ? [NSString stringWithFormat:@"%@.png", self.placeType] : [NSString stringWithFormat:@"%@s.png", self.placeType]];
     
     return pinView;
 }
@@ -194,7 +198,10 @@
 - (IBAction)addButton:(id)sender
 {
     shownItems +=20;
-    [self.mapView removeOverlays:self.mapView.overlays];
+    
+    // TODO - comment next line
+//    [self.mapView removeOverlays:self.mapView.overlays];
+    
     NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomMapObjectsFromDB:shownItems]];
     
     for (MapObject *object in randomLocations) {
@@ -202,7 +209,13 @@
         
         FMISingleMapObject *marker = [[FMISingleMapObject alloc] init];
         marker.coordinate = loc.coordinate;
-        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
+        
+        // TODO - uncomment
+//        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
+        marker.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
+        
+        marker.type = [NSNumber numberWithInt:[object.type intValue]];
+        
         [self.clusterer addMarker:marker];
         
     }
@@ -238,7 +251,7 @@
 - (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex < self.allTypes.count) {
-        self.placeType = [self.allTypes objectAtIndex:buttonIndex];
+//        self.placeType = [self.allTypes objectAtIndex:buttonIndex];
     }
     
 }

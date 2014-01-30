@@ -54,10 +54,12 @@
     
     if (self.markers.count == 1){
         self.title = ((id<FMISingleMapObject>)self.markers.lastObject).title;
-        self.subtitle = ((id<FMISingleMapObject>)self.markers.lastObject).title;
+//        self.subtitle = ((id<FMISingleMapObject>)self.markers.lastObject).title;
+        self.type = [NSNumber numberWithInt:[((FMISingleMapObject *)self.markers.lastObject).type intValue]];
     } else{
         self.title = [NSString stringWithFormat:self.markerClusterer.clusterTitle, self.markers.count];
-        self.subtitle = @"";
+        self.type = [NSNumber numberWithInt:[((FMISingleMapObject *)self.markers.lastObject).type intValue]];
+//        self.subtitle = @"";
     }
     
     return YES;

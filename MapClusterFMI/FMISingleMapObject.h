@@ -15,6 +15,7 @@
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
+@property (nonatomic, copy) NSNumber *type;
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
 @end

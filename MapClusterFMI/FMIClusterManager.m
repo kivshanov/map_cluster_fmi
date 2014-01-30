@@ -81,19 +81,6 @@
     [self.mapView removeAnnotations:self.markerAnnotations];
 }
 
-
-- (BOOL)markerInBounds:(id<FMISingleMapObject>)marker
-{
-    CGPoint pix = [self.mapView convertCoordinate:marker.coordinate toPointToView:nil];
-    if (pix.x >=-150 && pix.x <= _mapView.frame.size.width+150) {
-        if (pix.y >=-150 && pix.y <= _mapView.frame.size.height+150) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-
 - (void)setMapRegionForMinLat:(CGFloat)minLatitude minLong:(CGFloat)minLongitude maxLat:(CGFloat)maxLatitude maxLong:(CGFloat)maxLongitude
 {    
     MKCoordinateRegion region;
@@ -131,7 +118,9 @@
     for (FMIClusterObject *cluster in _clusters) {
         if ([cluster hasCenter]) {
             CGFloat d = [self distanceBetweenPoints:cluster.coordinate p2:marker.coordinate];
-            if (d < distance) {
+            NSNumber *markerType = ((FMISingleMapObject *)marker).type;
+            NSNumber *clusterType = cluster.type;
+            if (d < distance && [markerType isEqualToNumber:clusterType]) {
                 distance = d;
                 clusterToAddTo = cluster;
             }
@@ -153,7 +142,6 @@
     for (id<FMISingleMapObject>marker in _markers) {
         if (marker.coordinate.latitude == 0 && marker.coordinate.longitude == 0) 
             continue;
-        //if ([self markerInBounds:marker])
              [self addToClosestCluster:marker];
     }
 }
@@ -329,7 +317,6 @@
         [self splitAnnotationsWithDictionary:dic];
     }
 }
-
 
 - (void)joinAnnotationsWithDictionary:(NSDictionary *)dictionary
 {
