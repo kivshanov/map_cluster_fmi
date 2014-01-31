@@ -14,7 +14,6 @@
 }
 @property BOOL isMenuOpen;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAnnotations;
-//@property (strong, nonatomic) NSString *placeType;
 @property (strong, nonatomic) NSArray *allTypes;
 @property (strong, readwrite, nonatomic) FMIClusterManager *clusterer;
 
@@ -54,7 +53,6 @@
     self.isMenuOpen = YES;
     self.numberOfAnnotations.text = @"0";
     self.allTypes = [NSArray arrayWithObjects:@"Park", @"Restaurant", @"Cafe", nil];
-//    self.placeType = [self.allTypes objectAtIndex:self.selectedType];
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         for (UIButton *button in self.view.subviews) {
@@ -69,11 +67,9 @@
     
     
     // Create clusterer, assign a map view and delegate (MKMapViewDelegate)
-    //
     self.clusterer = [[FMIClusterManager alloc] initWithMapView:self.mapView delegate:self];
     
     // Set smaller grid size for an iPad
-    //
     self.clusterer.size = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 25 : 20;
     self.clusterer.clusterName = @"%i items";
     
@@ -87,7 +83,6 @@
         FMISingleMapObject *singleObject = [[FMISingleMapObject alloc] init];
         singleObject.coordinate = loc.coordinate;
         
-        // TODO - uncomment
         singleObject.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
 //        singleObject.title = [NSString stringWithFormat:@"%@", self.placeType];
         
@@ -101,11 +96,9 @@
     
 
     // Create clusters (without animations on view load)
-    //
     [self.clusterer doClustering:NO];
     
     // Zoom to show all clusters/singleObjects on the map
-    //
     [self.clusterer zoomToAnnotationsBounds:self.clusterer.singleObjects];
     
 }
@@ -184,7 +177,6 @@
         pinView.canShowCallout = YES;
     }
     
-    // TODO - uncomment next line
     pinView.image = [UIImage imageNamed:annotation.singleObjects.count == 1 ? [NSString stringWithFormat:@"%@.png", [self.allTypes objectAtIndex:[annotation.type intValue]]] : [NSString stringWithFormat:@"%@s.png", [self.allTypes objectAtIndex:[annotation.type intValue]]]];
 //    pinView.image = [UIImage imageNamed:annotation.singleObjects.count == 1 ? [NSString stringWithFormat:@"%@.png", self.placeType] : [NSString stringWithFormat:@"%@s.png", self.placeType]];
     
@@ -199,7 +191,6 @@
 {
     shownItems +=20;
     
-    // TODO - comment next line
 //    [self.mapView removeOverlays:self.mapView.overlays];
     
     NSArray *randomLocations = [[NSArray alloc] initWithArray:[self randomMapObjectsFromDB:shownItems]];
@@ -210,7 +201,6 @@
         FMISingleMapObject *singleObject = [[FMISingleMapObject alloc] init];
         singleObject.coordinate = loc.coordinate;
         
-        // TODO - uncomment
 //        singleObject.title = [NSString stringWithFormat:@"%@", self.placeType];
         singleObject.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
         
@@ -251,11 +241,12 @@
 - (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex < self.allTypes.count) {
-//        self.placeType = [self.allTypes objectAtIndex:buttonIndex];
+        self.selectedType = buttonIndex;
     }
-    
 }
 
+
+// TODO: fetch objects from self.selectedType type
 - (NSArray *)randomMapObjectsFromDB:(NSInteger)count
 {
     return  [MapObject getObjectsForMaxIndex:count];
