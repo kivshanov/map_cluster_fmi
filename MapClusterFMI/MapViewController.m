@@ -223,7 +223,7 @@
     self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d",(int) shownItems];
     
     // Zoom to show all clusters/singleObjects on the map
-    //
+    [self.clusterer doClustering:YES];
     [self.clusterer zoomToAnnotationsBounds:self.clusterer.singleObjects];
 }
 
