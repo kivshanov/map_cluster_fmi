@@ -1,5 +1,5 @@
 //
-// FMIClusterMarker
+// FMIClusterManager.h
 //  MapClusterFMI
 //
 //  Created by Pavlina Gatova on 01/18/14.
@@ -14,36 +14,35 @@
 #import "FMIGeographicBounds.h"
 #import "FMIClusterObject.h"
 
-@protocol FMIClusterMarker <MKMapViewDelegate>
+@protocol FMIClusterManager<MKMapViewDelegate>
 
 @optional
 
-- (void)markerClusterer:(FMIClusterManager *)markerCluster withMapView:(MKMapView *)mapView updateViewOfAnnotation:(id<MKAnnotation>)annotation withView:(MKAnnotationView *)annotationView;
+- (void)singleObjectCluster:(FMIClusterManager *)singleObjectCluster withMapView:(MKMapView *)mapView updateViewOfAnnotation:(id<MKAnnotation>)annotation withView:(MKAnnotationView *)annotationView;
 
 @end
 
 @interface FMIClusterManager : NSObject <MKMapViewDelegate> {
-    NSMutableArray *_tempViews;
     BOOL _animated;
 }
 
 @property (weak, readwrite, nonatomic) MKMapView *mapView;
-@property (strong, readonly, nonatomic) NSMutableArray *markers;
+@property (strong, readonly, nonatomic) NSMutableArray *singleObjects;
 @property (strong, readonly, nonatomic) NSMutableArray *clusters;
-@property (assign, readwrite, nonatomic) NSInteger gridSize;
-@property (assign, readwrite, nonatomic) BOOL isAverageCenter;
-@property (assign, readwrite, nonatomic) CGFloat maxDelayOfSplitAnimation;
-@property (assign, readwrite, nonatomic) CGFloat maxDurationOfSplitAnimation;
-@property (weak, readwrite, nonatomic) id<FMIClusterMarker> delegate;
-@property (copy, readwrite, nonatomic) NSString *clusterTitle;
+@property (assign, readwrite, nonatomic) NSInteger size;
+@property (readwrite, assign, nonatomic) BOOL isAverageCenter;
+@property (assign, readwrite, nonatomic) CGFloat maxAnimationDelay;
+@property (assign, readwrite, nonatomic) CGFloat maxAnimationDuration;
+@property (weak, readwrite, nonatomic) id<FMIClusterManager> delegate;
+@property (copy, readwrite, nonatomic) NSString *clusterName;
 @property (assign, readonly, nonatomic) BOOL animating;
 
-- (id)initWithMapView:(MKMapView *)mapView delegate:(id <FMIClusterMarker>)delegate;
-- (void)addMarker:(id<FMISingleMapObject>)marker;
-- (void)addMarkers:(NSArray*)markers;
-- (void)removeMarker:(id<FMISingleMapObject>)marker;
-- (void)removeAllMarkers;
+- (id)initWithMapView:(MKMapView *)mapView delegate:(id <FMIClusterManager>)delegate;
+- (void)addSingleObject:(id<FMISingleMapObject>)singleObject;
+- (void)addSingleObjects:(NSArray*)singleObjects;
+- (void)removeSingleObject:(id<FMISingleMapObject>)singleObject;
+- (void)removeAllSingleObjects;
 - (void)zoomToAnnotationsBounds:(NSArray *)annotations;
-- (void)clusterize:(BOOL)animated;
+- (void)doClustering:(BOOL)animated;
 
 @end

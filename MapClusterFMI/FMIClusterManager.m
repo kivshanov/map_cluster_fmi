@@ -1,5 +1,5 @@
 //
-// FMIClusterMarker
+// FMIClusterManager.m
 //  MapClusterFMI
 //
 //  Created by Pavlina Gatova on 01/18/14.
@@ -17,7 +17,7 @@
 @interface FMIClusterManager ()
 
 @property (assign, readwrite, nonatomic) BOOL animating;
-@property (strong, readonly, nonatomic) NSArray *markerAnnotations;
+@property (strong, readonly, nonatomic) NSArray *singleObjectAnnotations;
 
 @end
 
@@ -29,19 +29,18 @@
     if (!self)
         return nil;
     
-    _gridSize = 25;
-    _maxDelayOfSplitAnimation = 0;
-    _maxDelayOfSplitAnimation = 0.25;
-    _tempViews = [[NSMutableArray alloc] init];
-    _markers = [[NSMutableArray alloc] init];
+    _size = 25;
+    _maxAnimationDelay = 0;
+    _maxAnimationDuration = 0.25;
+    _singleObjects = [[NSMutableArray alloc] init];
     _clusters = [[NSMutableArray alloc] init];
     
-    _clusterTitle = @"%i items";
+    _clusterName = @"%i items";
     
     return self;
 }
 
-- (id)initWithMapView:(MKMapView *)mapView delegate:(id<FMIClusterMarker>)delegate
+- (id)initWithMapView:(MKMapView *)mapView delegate:(id<FMIClusterManager>)delegate
 {
     self = [self init];
     if (!self)
@@ -59,26 +58,26 @@
     _mapView.delegate = self;
 }
 
-- (void)addMarker:(id<FMISingleMapObject>)marker
+- (void)addSingleObject:(id<FMISingleMapObject>)singleObject
 {
-    [_markers addObject:marker];
+    [_singleObjects addObject:singleObject];
 }
 
-- (void)addMarkers:(NSArray*)markers;
+- (void)addSingleObjects:(NSArray*)singleObjects;
 {
-    [_markers addObjectsFromArray:markers];
+    [_singleObjects addObjectsFromArray:singleObjects];
 }
 
-- (void)removeMarker:(id<FMISingleMapObject>)marker;
+- (void)removeSingleObject:(id<FMISingleMapObject>)singleObject
 {
-    [_markers removeObject:marker];
+    [_singleObjects removeObject:singleObject];
 }
 
-- (void)removeAllMarkers
+- (void)removeAllSingleObjects
 {
     [_clusters removeAllObjects];
-    [_markers removeAllObjects];
-    [self.mapView removeAnnotations:self.markerAnnotations];
+    [_singleObjects removeAllObjects];
+    [self.mapView removeAnnotations:self.singleObjectAnnotations];
 }
 
 - (void)setMapRegionForMinLat:(CGFloat)minLatitude minLong:(CGFloat)minLongitude maxLat:(CGFloat)maxLatitude maxLong:(CGFloat)maxLongitude
@@ -111,27 +110,27 @@
 	return d;
 }
 
-- (void)addToClosestCluster:(id<FMISingleMapObject>)marker
+- (void)addToClosestCluster:(id<FMISingleMapObject>)singleObject
 {
     CGFloat distance = 40000; // Some large number
     FMIClusterObject *clusterToAddTo;
     for (FMIClusterObject *cluster in _clusters) {
-        if ([cluster hasCenter]) {
-            CGFloat d = [self distanceBetweenPoints:cluster.coordinate p2:marker.coordinate];
-            NSNumber *markerType = ((FMISingleMapObject *)marker).type;
+        if ([cluster hasClusterCenter]) {
+            CGFloat d = [self distanceBetweenPoints:cluster.coordinate p2:singleObject.coordinate];
+            NSNumber *singleObjectType = ((FMISingleMapObject *)singleObject).type;
             NSNumber *clusterType = cluster.type;
-            if (d < distance && [markerType isEqualToNumber:clusterType]) {
+            if (d < distance && [singleObjectType isEqualToNumber:clusterType]) {
                 distance = d;
                 clusterToAddTo = cluster;
             }
         }
     }
     
-    if (clusterToAddTo && [clusterToAddTo isMarkerInClusterBounds:marker]) {
-        [clusterToAddTo addMarker:marker];
+    if (clusterToAddTo && [clusterToAddTo isSingleObjectInClusterBounds:singleObject]) {
+        [clusterToAddTo addSingleObject:singleObject];
     } else {
-        FMIClusterObject *cluster = [[FMIClusterObject alloc] initWithClusterer:self];
-        [cluster addMarker:marker];
+        FMIClusterObject *cluster = [[FMIClusterObject alloc] initWithCluster:self];
+        [cluster addSingleObject:singleObject];
         [_clusters addObject:cluster];
     }
 }
@@ -139,16 +138,16 @@
 - (void)createClusters
 {
     [_clusters removeAllObjects];
-    for (id<FMISingleMapObject>marker in _markers) {
-        if (marker.coordinate.latitude == 0 && marker.coordinate.longitude == 0) 
+    for (id<FMISingleMapObject>singleObject in _singleObjects) {
+        if (singleObject.coordinate.latitude == 0 && singleObject.coordinate.longitude == 0)
             continue;
-             [self addToClosestCluster:marker];
+             [self addToClosestCluster:singleObject];
     }
 }
 
-- (void)clusterize
+- (void)doClustering
 {
-    [self clusterize:YES];
+    [self doClustering:YES];
 }
 
 - (void)addObject:(id) object toDictionary:(NSMutableDictionary *)dictionary withKey:(NSString *)key
@@ -212,7 +211,7 @@
     return (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + smallNumber;
 }
 
-- (void)splitAnnotationsWithDictionary:(NSDictionary *)dictionary
+- (void)splitAnnotations:(NSDictionary *)dictionary
 {
     NSDictionary *mergeators = [dictionary objectForKey:mergeatorsKey];
     NSDictionary *mixes = [dictionary objectForKey:mixesKey];
@@ -229,7 +228,7 @@
                     annotation.coordinate = endCluster.coordinate;
                     _animating = YES;
                     __typeof (&*self) __weak weakSelf = self;
-                    [UIView animateWithDuration:[self randomFloatBetween:0.25 and:_maxDurationOfSplitAnimation] delay:[self randomFloatBetween:0 and:_maxDelayOfSplitAnimation]
+                    [UIView animateWithDuration:[self randomFloatBetween:0.25 and:_maxAnimationDuration] delay:[self randomFloatBetween:0 and:_maxAnimationDelay]
                                         options:UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
                                      animations:^{
                                          annotation.coordinate = realCoordinate;
@@ -250,7 +249,7 @@
 }
 
 
-- (void)clusterize:(BOOL)animated
+- (void)doClustering:(BOOL)animated
 {
     if (_animating && animated)
         return;
@@ -262,44 +261,44 @@
     NSMutableDictionary *mixDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
     NSMutableArray *remainingAnnotations = [NSMutableArray arrayWithCapacity:0];
     
-    for (FMIClusterObject *cluster in ((self.markerAnnotations.count > _clusters.count) ? self.markerAnnotations : _clusters)) {
+    for (FMIClusterObject *cluster in ((self.singleObjectAnnotations.count > _clusters.count) ? self.singleObjectAnnotations : _clusters)) {
         if ([cluster isKindOfClass:[MKUserLocation class]])
             continue;
-        NSInteger numberOfMarkers = 1;
+        NSInteger numberOfSingleObjects = 1;
         NSMutableArray *posiblesArrays = [NSMutableArray arrayWithCapacity:0];
-        for (FMIClusterObject *cluster2 in ((self.markerAnnotations.count <= _clusters.count)?self.markerAnnotations:_clusters)) {
+        for (FMIClusterObject *cluster2 in ((self.singleObjectAnnotations.count <= _clusters.count)?self.singleObjectAnnotations:_clusters)) {
             if ([cluster2 isKindOfClass:[MKUserLocation class]])
                 continue;
-            NSInteger markers = [cluster markersInClusterFromMarkers:cluster2.markers];
-            if(markers >= numberOfMarkers){
+            NSInteger singleObjects = [cluster singleObjectsInClusterFromSingleObjects:cluster2.singleObjects];
+            if(singleObjects >= numberOfSingleObjects){
                 [posiblesArrays addObject:cluster2];
-                numberOfMarkers = markers;
+                numberOfSingleObjects = singleObjects;
             }
         }
         
         if (posiblesArrays.count == 1) {
-            [self addObject:cluster toDictionary:mixDictionary withKey:((FMIClusterObject *)[posiblesArrays lastObject]).coordinateTag];
+            [self addObject:cluster toDictionary:mixDictionary withKey:((FMIClusterObject *)[posiblesArrays lastObject]).tag];
         } else if(posiblesArrays.count == 0) {
             [remainingAnnotations addObject:cluster];
         } else {
             NSInteger minor = INT16_MAX;
             NSInteger index = posiblesArrays.count-1;
             for (FMIClusterObject *cluster in posiblesArrays) {
-                if (cluster.markers.count < minor) {
+                if (cluster.singleObjects.count < minor) {
                     index = [posiblesArrays indexOfObject:cluster];
-                    minor = cluster.markers.count;
+                    minor = cluster.singleObjects.count;
                 }
             }
-            [self addObject:cluster toDictionary:mixDictionary withKey:((FMIClusterObject *)[posiblesArrays objectAtIndex:index]).coordinateTag];
+            [self addObject:cluster toDictionary:mixDictionary withKey:((FMIClusterObject *)[posiblesArrays objectAtIndex:index]).tag];
         }
     }
     
     NSMutableDictionary *mergeators = [NSMutableDictionary dictionaryWithCapacity:0];
     
-    for (FMIClusterObject *cluster in ((self.markerAnnotations.count <= _clusters.count) ? self.markerAnnotations : _clusters)) {
+    for (FMIClusterObject *cluster in ((self.singleObjectAnnotations.count <= _clusters.count) ? self.singleObjectAnnotations : _clusters)) {
         if ([cluster isKindOfClass:[MKUserLocation class]])
             continue;
-        [mergeators setObject:cluster forKey:cluster.coordinateTag];
+        [mergeators setObject:cluster forKey:cluster.tag];
     }
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -307,18 +306,18 @@
                          mixDictionary,mixesKey,
                          nil];
     
-    if (self.markerAnnotations.count == 0) {
+    if (self.singleObjectAnnotations.count == 0) {
         [_mapView addAnnotations:_clusters];
     }
-    else if (self.markerAnnotations.count > _clusters.count) {
-        [self joinAnnotationsWithDictionary:dic];
+    else if (self.singleObjectAnnotations.count > _clusters.count) {
+        [self joinAnnotations:dic];
         //[self addAnnotationsWithOutSpliting:remainingAnnotations];
-    } else if(self.markerAnnotations.count < _clusters.count) {
-        [self splitAnnotationsWithDictionary:dic];
+    } else if(self.singleObjectAnnotations.count < _clusters.count) {
+        [self splitAnnotations:dic];
     }
 }
 
-- (void)joinAnnotationsWithDictionary:(NSDictionary *)dictionary
+- (void)joinAnnotations:(NSDictionary *)dictionary
 {
     NSDictionary *mergeators = [dictionary objectForKey:mergeatorsKey];
     NSDictionary *mixes = [dictionary objectForKey:mixesKey];
@@ -330,7 +329,7 @@
             if (_animated) {
                 _animating = YES;
                 __typeof (&*self) __weak weakSelf = self;
-                [UIView animateWithDuration:[self randomFloatBetween:0.25 and:_maxDurationOfSplitAnimation] delay:[self randomFloatBetween:0 and:_maxDelayOfSplitAnimation]
+                [UIView animateWithDuration:[self randomFloatBetween:0.25 and:_maxAnimationDuration] delay:[self randomFloatBetween:0 and:_maxAnimationDelay]
                                     options:UIViewAnimationCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction
                                  animations:^{
                                      annotation.coordinate = endCluster.coordinate;
@@ -351,15 +350,15 @@
             ((FMIClusterObject *)[annotations lastObject]).subtitle = endCluster.subtitle;
             MKAnnotationView *view = [_mapView viewForAnnotation:(_animated)?[annotations lastObject]:endCluster];
             [[view superview] bringSubviewToFront:view];
-            if (_animated) ((FMIClusterObject *)[annotations lastObject]).markers = endCluster.markers;
-            if ([self.delegate respondsToSelector:@selector(markerClusterer:withMapView:updateViewOfAnnotation:withView:)]) {
-                [self.delegate markerClusterer:self withMapView:_mapView updateViewOfAnnotation:annotation withView:[_mapView viewForAnnotation:annotation]];
+            if (_animated) ((FMIClusterObject *)[annotations lastObject]).singleObjects = endCluster.singleObjects;
+            if ([self.delegate respondsToSelector:@selector(singleObjectCluster:withMapView:updateViewOfAnnotation:withView:)]) {
+                [self.delegate singleObjectCluster:self withMapView:_mapView updateViewOfAnnotation:annotation withView:[_mapView viewForAnnotation:annotation]];
             }
         }
     }
 }
 
-- (NSArray *)markerAnnotations
+- (NSArray *)singleObjectAnnotations
 {
     NSMutableArray *annotations = [NSMutableArray array];
     for (NSObject *annotation in self.mapView.annotations) {
@@ -376,7 +375,7 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-    [self clusterize:YES];
+    [self doClustering:YES];
     [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
     
     if ([_delegate respondsToSelector:@selector(mapView:regionDidChangeAnimated:)])

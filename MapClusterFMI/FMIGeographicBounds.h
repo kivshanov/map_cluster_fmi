@@ -19,7 +19,7 @@
 
 - (id)initBoundsWithMapView:(MKMapView *)mapView;
 - (void)setBottomLeft:(CLLocationCoordinate2D)bl topRight:(CLLocationCoordinate2D)tr;
-- (void)setExtendedBounds:(NSInteger)gridSize;
-- (bool)contains:(CLLocationCoordinate2D)coordinate;
+- (void)setExtendedBounds:(NSInteger)size;
+- (bool)boundsContains:(CLLocationCoordinate2D)coordinate;
 
 @end

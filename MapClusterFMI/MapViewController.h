@@ -10,7 +10,7 @@
 #import <MapKit/MapKit.h>
 #import "FMIClusterManager.h"
 
-@interface MapViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate, FMIClusterMarker>
+@interface MapViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate, FMIClusterManager>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *menu;

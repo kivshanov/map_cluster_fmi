@@ -74,8 +74,8 @@
     
     // Set smaller grid size for an iPad
     //
-    self.clusterer.gridSize = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 25 : 20;
-    self.clusterer.clusterTitle = @"%i items";
+    self.clusterer.size = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 25 : 20;
+    self.clusterer.clusterName = @"%i items";
     
     shownItems +=20;
     [self.mapView removeOverlays:self.mapView.overlays];
@@ -84,16 +84,16 @@
     for (MapObject *object in randomLocations) {
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
-        FMISingleMapObject *marker = [[FMISingleMapObject alloc] init];
-        marker.coordinate = loc.coordinate;
+        FMISingleMapObject *singleObject = [[FMISingleMapObject alloc] init];
+        singleObject.coordinate = loc.coordinate;
         
         // TODO - uncomment
-        marker.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
-//        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
+        singleObject.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
+//        singleObject.title = [NSString stringWithFormat:@"%@", self.placeType];
         
-        marker.type = [NSNumber numberWithInt:[object.type intValue]];
+        singleObject.type = [NSNumber numberWithInt:[object.type intValue]];
         
-        [self.clusterer addMarker:marker];
+        [self.clusterer addSingleObject:singleObject];
         
     }
 
@@ -102,11 +102,11 @@
 
     // Create clusters (without animations on view load)
     //
-    [self.clusterer clusterize:NO];
+    [self.clusterer doClustering:NO];
     
-    // Zoom to show all clusters/markers on the map
+    // Zoom to show all clusters/singleObjects on the map
     //
-    [self.clusterer zoomToAnnotationsBounds:self.clusterer.markers];
+    [self.clusterer zoomToAnnotationsBounds:self.clusterer.singleObjects];
     
 }
 
@@ -185,8 +185,8 @@
     }
     
     // TODO - uncomment next line
-    pinView.image = [UIImage imageNamed:annotation.markers.count == 1 ? [NSString stringWithFormat:@"%@.png", [self.allTypes objectAtIndex:[annotation.type intValue]]] : [NSString stringWithFormat:@"%@s.png", [self.allTypes objectAtIndex:[annotation.type intValue]]]];
-//    pinView.image = [UIImage imageNamed:annotation.markers.count == 1 ? [NSString stringWithFormat:@"%@.png", self.placeType] : [NSString stringWithFormat:@"%@s.png", self.placeType]];
+    pinView.image = [UIImage imageNamed:annotation.singleObjects.count == 1 ? [NSString stringWithFormat:@"%@.png", [self.allTypes objectAtIndex:[annotation.type intValue]]] : [NSString stringWithFormat:@"%@s.png", [self.allTypes objectAtIndex:[annotation.type intValue]]]];
+//    pinView.image = [UIImage imageNamed:annotation.singleObjects.count == 1 ? [NSString stringWithFormat:@"%@.png", self.placeType] : [NSString stringWithFormat:@"%@s.png", self.placeType]];
     
     return pinView;
 }
@@ -207,31 +207,31 @@
     for (MapObject *object in randomLocations) {
         CLLocation *loc = [[CLLocation alloc]initWithLatitude:object.latitude.floatValue longitude:object.longtitude.floatValue];
         
-        FMISingleMapObject *marker = [[FMISingleMapObject alloc] init];
-        marker.coordinate = loc.coordinate;
+        FMISingleMapObject *singleObject = [[FMISingleMapObject alloc] init];
+        singleObject.coordinate = loc.coordinate;
         
         // TODO - uncomment
-//        marker.title = [NSString stringWithFormat:@"%@", self.placeType];
-        marker.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
+//        singleObject.title = [NSString stringWithFormat:@"%@", self.placeType];
+        singleObject.title = [NSString stringWithFormat:@"%@", [self.allTypes objectAtIndex:[object.type intValue]]];
         
-        marker.type = [NSNumber numberWithInt:[object.type intValue]];
+        singleObject.type = [NSNumber numberWithInt:[object.type intValue]];
         
-        [self.clusterer addMarker:marker];
+        [self.clusterer addSingleObject:singleObject];
         
     }
     
     self.numberOfAnnotations.text = [NSString stringWithFormat:@"%d",(int) shownItems];
     
-    // Zoom to show all clusters/markers on the map
+    // Zoom to show all clusters/singleObjects on the map
     //
-    [self.clusterer zoomToAnnotationsBounds:self.clusterer.markers];
+    [self.clusterer zoomToAnnotationsBounds:self.clusterer.singleObjects];
 }
 
 - (IBAction)removeButton:(id)sender
 {
     [self.mapView removeAnnotations:self.mapView.annotations];
     [self.mapView removeOverlays:self.mapView.overlays];
-    [self.clusterer removeAllMarkers];
+    [self.clusterer removeAllSingleObjects];
     shownItems = 0;
     self.numberOfAnnotations.text = @"0";
 }

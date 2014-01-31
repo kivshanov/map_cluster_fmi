@@ -28,7 +28,7 @@
 }
 
 
-- (bool)contains:(CLLocationCoordinate2D)coordinate
+- (bool)boundsContains:(CLLocationCoordinate2D)coordinate
 {
     CGPoint point = [_mapView convertCoordinate:coordinate toPointToView:_mapView];
     CGPoint topLeft = [_mapView convertCoordinate:_topLeft toPointToView:_mapView];
@@ -42,18 +42,18 @@
     return NO;
 }
 
-- (void)setExtendedBounds:(NSInteger)gridSize
+- (void)setExtendedBounds:(NSInteger)size
 {
     CLLocationCoordinate2D tr = CLLocationCoordinate2DMake(_topRight.latitude, _topRight.longitude);
     CLLocationCoordinate2D bl = CLLocationCoordinate2DMake(_bottomLeft.latitude, _bottomLeft.longitude);
     
     CGPoint trPix = [_mapView convertCoordinate:tr toPointToView:_mapView];
-    trPix.x += gridSize;
-    trPix.y -= gridSize;
+    trPix.x += size;
+    trPix.y -= size;
     
     CGPoint blPix = [_mapView convertCoordinate:bl toPointToView:_mapView];
-    blPix.x -= gridSize;
-    blPix.y += gridSize;
+    blPix.x -= size;
+    blPix.y += size;
     
     CLLocationCoordinate2D tr2 = [_mapView convertPoint:trPix toCoordinateFromView:_mapView];
     CLLocationCoordinate2D bl2 = [_mapView convertPoint:blPix toCoordinateFromView:_mapView];

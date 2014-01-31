@@ -11,54 +11,54 @@
 
 @interface FMIClusterObject ()
 
-@property (strong, readwrite, nonatomic) NSString *coordinateTag;
+@property (strong, readwrite, nonatomic) NSString *tag;
 
 @end
 
 @implementation FMIClusterObject
 
-- (id)initWithClusterer:(FMIClusterManager *)clusterer
+- (id)initWithCluster:(FMIClusterManager *)cluster
 {
     if ((self = [super init])) {
-        self.markerClusterer = clusterer;
-        self.averageCenter = [clusterer isAverageCenter];
-        self.markers = [[NSMutableArray alloc] init];
-        self.hasCenter = NO;
-        self.bounds = [[FMIGeographicBounds alloc] initBoundsWithMapView:self.markerClusterer.mapView];
+        self.singleObjectCluster = cluster;
+        self.averageCenter = [cluster isAverageCenter];
+        self.singleObjects = [[NSMutableArray alloc] init];
+        self.hasClusterCenter = NO;
+        self.bounds = [[FMIGeographicBounds alloc] initBoundsWithMapView:self.singleObjectCluster.mapView];
     }
     return self;
 }
 
-- (BOOL)addMarker:(id<FMISingleMapObject>)marker
+- (BOOL)addSingleObject:(id<FMISingleMapObject>)singleObject
 { 
-    if ([self isMarkerAlreadyAdded:marker])
+    if ([self isSingleObjectAlreadyAdded:singleObject])
         return NO;
     
-    if (!self.hasCenter) {
-        self.coordinate = marker.coordinate;
-        self.coordinateTag = [NSString stringWithFormat:@"%f%f", self.coordinate.latitude, self.coordinate.longitude];
-        self.hasCenter = YES;
-        [self calculateBounds];
+    if (!self.hasClusterCenter) {
+        self.coordinate = singleObject.coordinate;
+        self.tag = [NSString stringWithFormat:@"%f%f", self.coordinate.latitude, self.coordinate.longitude];
+        self.hasClusterCenter = YES;
+        [self setNewBounds];
     } else {
-        if (self.averageCenter && self.markers.count >= 2) {
-            CGFloat l = self.markers.count + 1;
-            CGFloat lat = (self.coordinate.latitude * (l - 1) + marker.coordinate.latitude) / l;
-            CGFloat lng = (self.coordinate.longitude * (l - 1) + marker.coordinate.longitude) / l;
+        if (self.averageCenter && self.singleObjects.count >= 2) {
+            CGFloat l = self.singleObjects.count + 1;
+            CGFloat lat = (self.coordinate.latitude * (l - 1) + singleObject.coordinate.latitude) / l;
+            CGFloat lng = (self.coordinate.longitude * (l - 1) + singleObject.coordinate.longitude) / l;
             self.coordinate = CLLocationCoordinate2DMake(lat, lng);
-            self.coordinateTag = [NSString stringWithFormat:@"%f%f", self.coordinate.latitude, self.coordinate.longitude];
-            self.hasCenter = YES;
-            [self calculateBounds];
+            self.tag = [NSString stringWithFormat:@"%f%f", self.coordinate.latitude, self.coordinate.longitude];
+            self.hasClusterCenter = YES;
+            [self setNewBounds];
         }
     }
-    [self.markers addObject:marker];
+    [self.singleObjects addObject:singleObject];
     
-    if (self.markers.count == 1){
-        self.title = ((id<FMISingleMapObject>)self.markers.lastObject).title;
-//        self.subtitle = ((id<FMISingleMapObject>)self.markers.lastObject).title;
-        self.type = [NSNumber numberWithInt:[((FMISingleMapObject *)self.markers.lastObject).type intValue]];
+    if (self.singleObjects.count == 1){
+        self.title = ((id<FMISingleMapObject>)self.singleObjects.lastObject).title;
+//        self.subtitle = ((id<FMISingleMapObject>)self.singleObjects.lastObject).title;
+        self.type = [NSNumber numberWithInt:[((FMISingleMapObject *)self.singleObjects.lastObject).type intValue]];
     } else{
-        self.title = [NSString stringWithFormat:self.markerClusterer.clusterTitle, self.markers.count];
-        self.type = [NSNumber numberWithInt:[((FMISingleMapObject *)self.markers.lastObject).type intValue]];
+        self.title = [NSString stringWithFormat:self.singleObjectCluster.clusterName, self.singleObjects.count];
+        self.type = [NSNumber numberWithInt:[((FMISingleMapObject *)self.singleObjects.lastObject).type intValue]];
 //        self.subtitle = @"";
     }
     
@@ -69,37 +69,37 @@
 {
     _coordinate = coordinate;
 
-    if (self.markers.count == 1) {
-        FMISingleMapObject *marker = self.markers.lastObject;
-        marker.coordinate = coordinate;
+    if (self.singleObjects.count == 1) {
+        FMISingleMapObject *singleObject = self.singleObjects.lastObject;
+        singleObject.coordinate = coordinate;
     }
 }
 
-- (void)calculateBounds
+- (void)setNewBounds
 {
     [self.bounds setBottomLeft:self.coordinate topRight:self.coordinate];
-    [self.bounds setExtendedBounds:self.markerClusterer.gridSize];
+    [self.bounds setExtendedBounds:self.singleObjectCluster.size];
 }
 
-- (BOOL)isMarkerInClusterBounds:(id<FMISingleMapObject>)marker
+- (BOOL)isSingleObjectInClusterBounds:(id<FMISingleMapObject>)singleObject
 {
-    return [self.bounds contains:marker.coordinate];
+    return [self.bounds boundsContains:singleObject.coordinate];
 }
 
-- (NSInteger)markersInClusterFromMarkers:(NSArray *) markers
+- (NSInteger)singleObjectsInClusterFromSingleObjects:(NSArray *)singleObjects
 {
     NSInteger result = 0;
-    for (id<FMISingleMapObject>marker in markers) {
-        if ([self isMarkerAlreadyAdded:marker])
+    for (id<FMISingleMapObject>singleObject in singleObjects) {
+        if ([self isSingleObjectAlreadyAdded:singleObject])
             result++;
     }
     return result;
 }
 
-- (BOOL)isMarkerAlreadyAdded:(id<FMISingleMapObject>)marker
+- (BOOL)isSingleObjectAlreadyAdded:(id<FMISingleMapObject>)singleObject
 {
-    for (id<FMISingleMapObject>m in self.markers) {
-        if ([m isEqual:marker])
+    for (id<FMISingleMapObject>m in self.singleObjects) {
+        if ([m isEqual:singleObject])
             return YES;
     }
     return NO;

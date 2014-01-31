@@ -16,20 +16,20 @@
 @interface FMIClusterObject : NSObject <MKAnnotation>
 
 @property (strong, readwrite, nonatomic) FMIGeographicBounds *bounds;
-@property (weak, readwrite, nonatomic) FMIClusterManager *markerClusterer;
+@property (weak, readwrite, nonatomic) FMIClusterManager *singleObjectCluster;
 @property (assign, readwrite, nonatomic) CLLocationCoordinate2D coordinate;
 @property (assign, readwrite, nonatomic) BOOL averageCenter;
-@property (assign, nonatomic) BOOL hasCenter;
-@property (copy, nonatomic) NSString *title;
-@property (copy, nonatomic) NSString *subtitle;
+@property (nonatomic, assign) BOOL hasClusterCenter;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, copy) NSNumber *type;
-@property (strong, nonatomic) NSMutableArray *markers;
-@property (strong, readonly, nonatomic) NSString *coordinateTag;
+@property (strong, nonatomic) NSMutableArray *singleObjects;
+@property (strong, readonly, nonatomic) NSString *tag;
 
-- (id)initWithClusterer:(FMIClusterManager *)clusterer;
-- (BOOL)isMarkerAlreadyAdded:(id<FMISingleMapObject>)marker;
-- (NSInteger)markersInClusterFromMarkers:(NSArray *)markers;
-- (BOOL)addMarker:(id<FMISingleMapObject>)marker;
-- (BOOL)isMarkerInClusterBounds:(id<FMISingleMapObject>)marker;
+- (id)initWithCluster:(FMIClusterManager *)cluster;
+- (BOOL)isSingleObjectAlreadyAdded:(id<FMISingleMapObject>)singleObject;
+- (NSInteger)singleObjectsInClusterFromSingleObjects:(NSArray *)singleObjects;
+- (BOOL)addSingleObject:(id<FMISingleMapObject>)singleObject;
+- (BOOL)isSingleObjectInClusterBounds:(id<FMISingleMapObject>)singleObject;
 
 @end
