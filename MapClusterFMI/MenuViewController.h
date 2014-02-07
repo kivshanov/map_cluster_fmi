@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FMIRequest.h"
 
-@interface MenuViewController : UIViewController
+@interface MenuViewController : UIViewController <BZBRequestDataDelegate>
 
 @property (nonatomic , weak) IBOutlet UIImageView *logoImg;
 @property (nonatomic , weak) IBOutlet UIImageView *swipeImg;

@@ -71,4 +71,17 @@ static inline NSInteger random_between(NSInteger min, NSInteger max) {
     return allObjects;
 }
 
++ (NSArray *)getObjectsForMaxIndex:(NSInteger)index andType:(NSInteger)type {
+    NSManagedObjectContext *context = [[CoreDataManager instance] managedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    request.entity = [NSEntityDescription entityForName:@"MapObject" inManagedObjectContext: context];
+    request.predicate = [NSPredicate predicateWithFormat:@"index <= %d && index >= %d && type == %d",index,index-19,type];
+    
+    NSError *error = nil;
+    NSArray *allObjects = [context executeFetchRequest:request error:&error];
+    
+    return allObjects;
+}
+
 @end

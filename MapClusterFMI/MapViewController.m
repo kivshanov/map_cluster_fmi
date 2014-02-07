@@ -189,6 +189,9 @@
 
 - (IBAction)addButton:(id)sender
 {
+    if(isWithReal && shownItems > 50) {
+        return;
+    }
     shownItems +=20;
     
 //    [self.mapView removeOverlays:self.mapView.overlays];
@@ -249,7 +252,13 @@
 // TODO: fetch objects from self.selectedType type
 - (NSArray *)randomMapObjectsFromDB:(NSInteger)count
 {
-    return  [MapObject getObjectsForMaxIndex:count];
+    if(isWithReal) {
+        return  [MapObject getObjectsForMaxIndex:count andType:self.selectedType];
+    }
+    else {
+        return  [MapObject getObjectsForMaxIndex:count];
+    }
+    
 }
 
 @end

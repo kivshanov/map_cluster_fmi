@@ -20,4 +20,5 @@
 
 + (void)insertCoordinatesinDB;
 + (NSArray *)getObjectsForMaxIndex:(NSInteger)index;
++ (NSArray *)getObjectsForMaxIndex:(NSInteger)index andType:(NSInteger)type;
 @end
