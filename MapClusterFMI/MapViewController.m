@@ -252,12 +252,9 @@
 // TODO: fetch objects from self.selectedType type
 - (NSArray *)randomMapObjectsFromDB:(NSInteger)count
 {
-    if(isWithReal) {
+
         return  [MapObject getObjectsForMaxIndex:count andType:self.selectedType];
-    }
-    else {
-        return  [MapObject getObjectsForMaxIndex:count];
-    }
+
     
 }
 
